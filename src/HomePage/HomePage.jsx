@@ -13,7 +13,8 @@ import { dynamicSort } from '../_helpers';
 
 const { Content } = Layout;
 
-// import './HomePage.css';
+import './HomePage.css';
+
 
 export const HomePage = () => {
 

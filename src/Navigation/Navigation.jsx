@@ -31,13 +31,7 @@ export const Navigation = (props) => {
             <Icon type="search" />
             <span>Comparison</span>
           </NavLink>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <NavLink to="/weight">
-            <Icon type="sliders" />
-            <span>Weights</span>
-          </NavLink>
-        </Menu.Item>
+        </Menu.Item>        
         <Menu.Item key="4" className="hide">
           <NavLink to="/subscriptions">
             <Icon type="usergroup-add" />

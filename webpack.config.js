@@ -1,3 +1,4 @@
+const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -9,11 +10,17 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: [/bower_components/, /node_modules/, /styles/],
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        include: [path.resolve('src')],
+        loaders: [ 'style-loader', 'css-loader' ]
+      },
+      {
+        test: /\.less$/,
+        loader: ['less-loader']// compiles Less to CSS
       },
       {
         test: /\.(png|jp(e*)g|svg|gif)$/,  
@@ -36,7 +43,7 @@ module.exports = {
   externals: {
     // global app config object
     config: JSON.stringify({
-      apiUrl: 'http://cip.dtra.io:3000'      
+      apiUrl: 'http://cip.dtra.io:3000'
     })
   }
 }

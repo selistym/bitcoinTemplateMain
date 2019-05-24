@@ -11,11 +11,13 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        exclude: [/bower_components/, /node_modules/, /styles/],
       },
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'css-loader' ]
+        include: /node_modules/,
+        use : [ 'style-loader', 'css-loader' ]
       },
       {
         test: /\.(png|jp(e*)g|svg|gif)$/,
