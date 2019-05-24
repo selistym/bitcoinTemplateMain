@@ -10,7 +10,10 @@ import { useListCoins, useAllCoins } from '../hooks';
 const loading = require('../_helpers/loading.gif');
 // helpers
 import { dynamicSort } from '../_helpers';
+
 const { Content } = Layout;
+
+// import './HomePage.css';
 
 export const HomePage = () => {
 
@@ -32,13 +35,20 @@ export const HomePage = () => {
     title:'#Marketcap',
     dataIndex:'mc_rank',
     key:'1',
+    sorter: (a, b) => a.mc_rank - b.mc_rank,
   },
+  {
+      title: 'Icon',
+      dataIndex: 'img_url',
+      key: '14',              
+      render: image => <img src={loading} data-src={image} width="20" height="20" />
+    },
     {
       title: 'Coin Name',
       dataIndex: 'coin_symbol',
       key: '2',              
       render: (volume, row) => {
-        return row.coin_symbol + " - " + row.coin_title;
+        return row.coin_title;
       }
     },
     ,{
@@ -101,10 +111,13 @@ export const HomePage = () => {
     },
     {
       title: 'Volatility_30_USD',
-      dataIndex: 'volatility_30_usd',
+      dataIndex: 'v_30_usd',
       key: '13'
     },
   ];
+
+  // sort coins by mc_rank
+  coins.sort(function(a,b){return a.mc_rank - b.mc_rank});
 
   return (
     <div>
@@ -112,8 +125,8 @@ export const HomePage = () => {
         <Navigation activeNav="1" />
         <Layout>
           <CustomHeader />
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
-            <Table rowKey={coin => coin.coin_id} pagination={false} dataSource={coins.sort(dynamicSort('full_name'))} columns={coinColumnsShort} size="small" />
+          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280}}>
+            <Table className="homeTable" rowKey={coin => coin.coin_id} pagination={false} dataSource={coins} columns={coinColumnsShort} size="small" />
           </Content>
         </Layout>
       </Layout>
