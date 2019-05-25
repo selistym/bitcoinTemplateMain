@@ -55,7 +55,8 @@ export const HomePage = () => {
     ,{
       title: 'Market Cap',
       dataIndex: 'market_cap',
-      key: '3'
+      key: '3',
+      sorter: (a, b) => a.market_cap - b.market_cap,
     },{
       title: 'Price',
       dataIndex: 'asset_price',
@@ -66,11 +67,13 @@ export const HomePage = () => {
       key: '5',
       render: (price, row) => {
         return `${Number.parseInt(((row.asset_price - price) / row.asset_price)*100)}%`;
-      }
+      },
+      sorter: (a, b) => a.asset_price_old - b.asset_price_old,
     },{
       title: 'Volume (24H)',
       dataIndex: 'volume_24_old',
-      key: '6'      
+      key: '6',      
+      sorter: (a, b) => a.volume_24_old - b.volume_24_old,
     },
     {
       title: 'Volume Change',
@@ -78,24 +81,28 @@ export const HomePage = () => {
       key: '7',
       render: (volume, row) => {
         return `${Number.parseInt(((volume - row.volume_24_old) / volume)*100)}%`;
-      }
+      },
+      sorter: (a, b) => a.volume_24 - b.volume_24,
     },
     {
       title: 'All Time High',
       dataIndex: 'ath',
-      key: '8'
+      key: '8',
+      sorter: (a, b) => a.ath - b.ath,
     },
     {
       title: 'All Time Low',
       dataIndex: 'atl',
-      key: '9'
+      key: '9',
+      sorter: (a, b) => a.atl - b.atl,
     },    {
       title: 'Buy Support 5%',
       dataIndex: 'buy_support_5',
       key: '10',
       render: price => {
         return Number.parseInt(price) || 0
-      }
+      },
+      sorter: (a, b) => a.buy_support_5 - b.buy_support_5,
     },
     {
       title: 'Sell Support 5%',
@@ -103,17 +110,20 @@ export const HomePage = () => {
       key: '11',
       render: price => {
         return Number.parseInt(price) || 0
-      }
+      },
+      sorter: (a, b) => a.sell_support_5 - b.sell_support_5,
     },
     {
       title: 'TA Rating',
       dataIndex: 'ta_rating',
-      key: '12'
+      key: '12',
+      sorter: (a, b) => a.ta_rating - b.ta_rating,
     },
     {
       title: 'Volatility_30_USD',
       dataIndex: 'v_30_usd',
-      key: '13'
+      key: '13',
+      sorter: (a, b) => a.v_30_usd - b.v_30_usd,
     },
   ];
 

@@ -14,7 +14,10 @@ export const Navigation = (props) => {
     <Sider style={{ minHeight: '100vh', background: '#252525' }} breakpoint="lg" onBreakpoint={(broken) => { console.log(broken); }} onCollapse={(collapsed, type) => { console.log(collapsed, type); }}>
       <div style={{color:'white', height: 32, marginTop: 16, marginBottom: 50, textAlign: 'center' }}>
         <img src={logo} style={{ width: '70%' }} />
-        <p style={{ fontSize: '11px' }}>Market Tool</p>
+        <div style={{display:'flex', marginTop: 16, justifyContent:'center'}}>
+          <p style={{ fontSize: '12px', fontWeight:600 }}>Market Tool</p>
+          <p style={{ color: '#f1b044', fontSize: '12px', fontWeight:600 }}>&nbsp;| Beta</p>
+        </div>
       </div>
       { desktop && <div style={{color:'white', height: 32, marginBottom: 5, textAlign: 'center' }}>{username}</div> }
       <div style={{color:'white', height: 20, textAlign: 'center' }}>• • •</div>
