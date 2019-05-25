@@ -59,12 +59,14 @@ const coinColumnsLong = [
   {
     title: 'Token supply',
     dataIndex: 'token_supply',
-    key: '4'
+    key: '4',        
+    sorter: (a, b) => a.token_supply - b.token_supply
   },
   {
     title: 'Marketcap',
     dataIndex: 'marketcap',
-    key: '5'
+    key: '5',        
+    sorter: (a, b) => a.marketcap - b.marketcap
   },
   {
     title: 'Price USD',
@@ -75,132 +77,158 @@ const coinColumnsLong = [
   {
     title: 'Price change USD (24h)',
     dataIndex: 'price_change_24',
-    key: '7'
+    key: '7',        
+    sorter: (a, b) => a.price_change_24 - b.price_change_24
   },
   {
     title: 'Volume 24h USD',
     dataIndex: 'volume_24_old',
-    key: '8'
+    key: '8',        
+    sorter: (a, b) => a.volume_24_old - b.volume_24_old
   },
   {
     title: 'Volume change (24h)',
     dataIndex: 'volume_change_24',
-    key: '9'
+    key: '9',        
+    sorter: (a, b) => a.volume_change_24 - b.volume_change_24
   },
   {
     title: 'Twitter list',
     dataIndex: 'twitter_list',
-    key: '10'
+    key: '10',        
+    sorter: (a, b) => a.twitter_list - b.twitter_list
   },
   {
     title: 'Twitter favorites',
     dataIndex: 'twitter_favorites',
-    key: '11'
+    key: '11',        
+    sorter: (a, b) => a.twitter_favorites - b.twitter_favorites
   },
   {
     title: 'Twitter following',
     dataIndex: 'twitter_following',
-    key: '12'
+    key: '12',        
+    sorter: (a, b) => a.twitter_following - b.twitter_following
   },
   {
     title: 'Twitter status',
     dataIndex: 'twitter_status',
-    key: '13'
+    key: '13',        
+    sorter: (a, b) => a.twitter_status - b.twitter_status
   },
   {
     title: 'Twitter followers',
     dataIndex: 'twitter_followers',
-    key: '14'
+    key: '14',        
+    sorter: (a, b) => a.twitter_followers - b.twitter_followers
   },
   {
     title: 'Reddit active users',
     dataIndex: 'reddit_active_users',
-    key: '15'
+    key: '15',        
+    sorter: (a, b) => a.reddit_active_users - b.reddit_active_users
   },
   {
     title: 'Reddit posts',
     dataIndex: 'reddit_posts',
-    key: '16'
+    key: '16',        
+    sorter: (a, b) => a.reddit_posts - b.reddit_posts
   },
   {
     title: 'Reddit comments',
     dataIndex: 'reddit_comments',
-    key: '17'
+    key: '17',        
+    sorter: (a, b) => a.reddit_comments - b.reddit_comments
   },
   {
     title: 'Reddit subscribers',
     dataIndex: 'reddit_subscribers',
-    key: '18'
+    key: '18',        
+    sorter: (a, b) => a.reddit_subscribers - b.reddit_subscribers
   },
   {
     title: 'Github Closed issues',
     dataIndex: 'github_closed_issues',
-    key: '19'
+    key: '19',        
+    sorter: (a, b) => a.github_closed_issues - b.github_closed_issues
   },
   {
     title: 'Github Open pull issues',
     dataIndex: 'github_open_pull_issues',
-    key: '20'
+    key: '20',        
+    sorter: (a, b) => a.github_open_pull_issues - b.github_open_pull_issues
   },
   {
     title: 'Github Closed pull issues',
     dataIndex: 'github_closed_pull_issues',
-    key: '21'
+    key: '21',        
+    sorter: (a, b) => a.github_closed_pull_issues - b.github_closed_pull_issues
   },
   {
     title: 'Github Forks',
     dataIndex: 'github_forks',
-    key: '22'
+    key: '22',        
+    sorter: (a, b) => a.github_forks - b.github_forks
   },
   {
     title: 'Marketcap',
     dataIndex: 'marketcap',
-    key: '23'
+    key: '23',        
+    sorter: (a, b) => a.marketcap - b.marketcap
   },
   {
     title: 'Github Subscribers',
     dataIndex: 'github_subscribers',
-    key: '24'
+    key: '24',        
+    sorter: (a, b) => a.github_subscribers - b.github_subscribers
   },
   {
     title: 'Github',
     dataIndex: 'github_stars',
-    key: '25'
+    key: '25',        
+    sorter: (a, b) => a.github_stars - b.github_stars
   },
   {
     title: 'Volatilty 30 day (USD)',
     dataIndex: 'volatility_30_usd',
-    key: '26'
+    key: '26',        
+    sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd
   },
   {
     title: 'Volatilty 60 days (USD)',
     dataIndex: 'volatility_60_usd',
-    key: '27'
+    key: '27',        
+    sorter: (a, b) => a.volatility_60_usd - b.volatility_60_usd
   },
   {
     title: 'Volatilty 120 days (USD)',
     dataIndex: 'volatility_120_usd',
-    key: '28'
+    key: '28',        
+    sorter: (a, b) => a.volatility_120_usd - b.volatility_120_usd
   },
   {
     title: 'Volatilty 1 year (USD)',
     dataIndex: 'volatility_year_usd',
-    key: '29'
+    key: '29',        
+    sorter: (a, b) => a.volatility_year_usd - b.volatility_year_usd
   },
   {
     title: 'ATH (USD)',
     dataIndex: 'usd_ath',
-    key: '30'
+    key: '30',        
+    sorter: (a, b) => a.usd_ath - b.usd_ath
   },
   {
     title: 'Days since ATH (USD)',
     dataIndex: 'ath',
-    key: '31'
+    key: '31',        
+    sorter: (a, b) => a.ath - b.ath
   },
   {
     title: 'Current Price/ATH (USD)',
     dataIndex: 'ath_div_current_usd',
-    key: '32'
+    key: '32',        
+    sorter: (a, b) => a.ath_div_current_usd - b.ath_div_current_usd
   },
   {
     title: 'ATL (USD)',
@@ -211,138 +239,164 @@ const coinColumnsLong = [
   {
     title: 'Days since ATL (USD)',
     dataIndex: 'days_atl_usd',
-    key: '34'
+    key: '34',        
+    sorter: (a, b) => a.days_atl_usd - b.days_atl_usd
   },
   {
     title: 'ATL/Current Price (USD)',
     dataIndex: 'atl_div_current_usd',
-    key: '35'
+    key: '35',        
+    sorter: (a, b) => a.atl_div_current_usd - b.atl_div_current_usd
   },
   {
     title: 'Weekly Price change % (USD)',
     dataIndex: 'week_usd_change',
-    key: '36'
+    key: '36',        
+    sorter: (a, b) => a.week_usd_change - b.week_usd_change
   },
   {
     title: 'Mayer Multiple (USD)',
     dataIndex: 'mayer_multiple_usd',
-    key: '37'
+    key: '37',        
+    sorter: (a, b) => a.mayer_multiple_usd - b.mayer_multiple_usd
   },
   {
     title: '30 days ratio (USD) Last 30d price avg / Past 30d price avg',
     dataIndex: 'last30_div_past30_usd',
-    key: '38'
+    key: '38',        
+    sorter: (a, b) => a.last30_div_past30_usd - b.last30_div_past30_usd
   },
   {
     title: '60 days ratio (USD) Last 60d price avg / Past 60d price avg',
     dataIndex: 'last60_div_past60_usd',
-    key: '39'
+    key: '39',        
+    sorter: (a, b) => a.last60_div_past60_usd - b.last60_div_past60_usd
   },
   {
     title: '120 days ratio (USD) Last 120d price avg / Past 120d price avg',
     dataIndex: 'last120_div_past120_usd',
-    key: '40'
+    key: '40',        
+    sorter: (a, b) => a.last120_div_past120_usd - b.last120_div_past120_usd
   },
   {
     title: '1 year ratio (USD) Last year price avg / Past year price avg',
     dataIndex: 'lastyear_div_pastyear_usd',
-    key: '41'
+    key: '41',        
+    sorter: (a, b) => a.lastyear_div_pastyear_usd - b.lastyear_div_pastyear_usd
   },
   {
     title: 'Buy Support 1%',
     dataIndex: 'buy_support_1',
-    key: '42'
+    key: '42',        
+    sorter: (a, b) => a.buy_support_1 - b.buy_support_1
   },
   {
     title: 'Buy Support 2%',
     dataIndex: 'buy_support_2',
-    key: '43'
+    key: '43',        
+    sorter: (a, b) => a.buy_support_2 - b.buy_support_2
   },
   {
     title: 'Buy Support 3%',
     dataIndex: 'buy_support_3',
-    key: '44'
+    key: '44',        
+    sorter: (a, b) => a.buy_support_3 - b.buy_support_3
   },
   {
     title: 'Buy Support 4%',
     dataIndex: 'buy_support_4',
-    key: '45'
+    key: '45',        
+    sorter: (a, b) => a.buy_support_4 - b.buy_support_4
   },
   {
     title: 'Buy Support 5%',
     dataIndex: 'buy_support_5',
-    key: '46'
+    key: '46',        
+    sorter: (a, b) => a.buy_support_5 - b.buy_support_5
   },
   {
     title: 'Buy Support 10%',
     dataIndex: 'buy_support_10',
-    key: '47',
-    render: price => price ? Number(price) : 0
+    key: '47',        
+    sorter: (a, b) => a.buy_support_10 - b.buy_support_10
   },
   {
     title: 'Buy Support 15%',
     dataIndex: 'buy_support_15',
-    key: '48'
+    key: '48',        
+    sorter: (a, b) => a.buy_support_15 - b.buy_support_15
   },
   {
     title: 'Sell Support 1%',
     dataIndex: 'sell_support_1',
-    key: '49'
+    key: '49',        
+    sorter: (a, b) => a.sell_support_1 - b.sell_support_1
   },
   {
     title: 'Sell Support 2%',
     dataIndex: 'sell_support_2',
-    key: '50'
+    key: '50',        
+    sorter: (a, b) => a.sell_support_2 - b.sell_support_2
   },
   {
     title: 'Sell Support 3%',
     dataIndex: 'sell_support_3',
-    key: '51'
+    key: '51',        
+    sorter: (a, b) => a.sell_support_3 - b.sell_support_3
   },
   {
     title: 'Sell Support 4%',
     dataIndex: 'sell_support_4',
-    key: '52'
+    key: '52',        
+    sorter: (a, b) => a.sell_support_4 - b.sell_support_4
   },
   {
     title: 'Sell Support 5%',
     dataIndex: 'sell_support_5',
-    key: '53'
+    key: '53',        
+    sorter: (a, b) => a.sell_support_5 - b.sell_support_5
   },
   {
     title: 'Sell Support 10%',
     dataIndex: 'sell_support_10',
-    key: '54'
+    key: '54',        
+    sorter: (a, b) => a.sell_support_10 - b.sell_support_10
   },
   {
     title: 'Sell Support 15%',
     dataIndex: 'sell_support_15',
-    key: '55'
+    key: '55',        
+    sorter: (a, b) => a.sell_support_15 - b.sell_support_15
   },
   {
     title: 'Buy 10%/Sell 10%',
     dataIndex: 'buy_div_sell_10',
-    key: '56'
+    key: '56',        
+    sorter: (a, b) => a.buy_div_sell_10 - b.buy_div_sell_10
   },
   {
     title: 'Buy 5%/Sell 5%',
     dataIndex: 'buy_div_sell_5',
-    key: '57'
+    key: '57',        
+    sorter: (a, b) => a.buy_div_sell_5 - b.buy_div_sell_5
   },
   {
     title: 'Buy Support 10% / Market cap',
     dataIndex: 'buy_10_div_mcap',
-    key: '58'
+    key: '58',        
+    sorter: (a, b) => a.buy_10_div_mcap - b.buy_10_div_mcap
   },
   {
     title: '(Buy 10%/Sell 10%)^2 * (Buy 10%/Market cap)',
     dataIndex: 'amir_liquidity_metric',
-    key: '59'
+    key: '59',        
+    sorter: (a, b) => a.amir_liquidity_metric - b.amir_liquidity_metric
   },
   {
     title: '(Buy 10%-Sell 10%) / (Buy 10%+Sell 10%)',
     dataIndex: 'andrey_liquidity_metric',
-    key: '60'
+    key: '60',        
+    sorter: (a, b) => a.andrey_liquidity_metric - b.andrey_liquidity_metric
   }
 ];
 
