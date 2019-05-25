@@ -64,10 +64,10 @@ const coinColumnsLong = [
     sorter: (a, b) => a.token_supply - b.token_supply
   },
   {
-    title: 'Marketcap',
-    dataIndex: 'marketcap',
+    title: 'Market Cap',
+    dataIndex: 'market_cap',
     key: '5',        
-    sorter: (a, b) => a.marketcap - b.marketcap
+    sorter: (a, b) => a.market_cap - b.market_cap
   },
   {
     title: 'Price USD',
@@ -172,12 +172,6 @@ const coinColumnsLong = [
     sorter: (a, b) => a.github_forks - b.github_forks
   },
   {
-    title: 'Marketcap',
-    dataIndex: 'marketcap',
-    key: '23',        
-    sorter: (a, b) => a.marketcap - b.marketcap
-  },
-  {
     title: 'Github Subscribers',
     dataIndex: 'github_subscribers',
     key: '24',        
@@ -215,18 +209,18 @@ const coinColumnsLong = [
   },
   {
     title: 'ATH (USD)',
-    dataIndex: 'usd_ath',
-    key: '30',        
-    sorter: (a, b) => a.usd_ath - b.usd_ath
-  },
-  {
-    title: 'Days since ATH (USD)',
     dataIndex: 'ath',
-    key: '31',        
+    key: '30',        
     sorter: (a, b) => a.ath - b.ath
   },
   {
-    title: 'Current Price/ATH (USD)',
+    title: 'Days since ATH (USD)',
+    dataIndex: 'days_ath_usd',
+    key: '31',        
+    sorter: (a, b) => a.days_ath_usd - b.days_ath_usd
+  },
+  {
+    title: 'ATH/Current Price (USD)',
     dataIndex: 'ath_div_current_usd',
     key: '32',        
     sorter: (a, b) => a.ath_div_current_usd - b.ath_div_current_usd
