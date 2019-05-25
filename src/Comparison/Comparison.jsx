@@ -54,7 +54,8 @@ const coinColumnsLong = [
   {
     title: 'TA score',
     dataIndex: 'ta_score',
-    key: '3'
+    key: '3',
+    sorter: (a, b) => a.ta_score - b.ta_score
   },
   {
     title: 'Token supply',
