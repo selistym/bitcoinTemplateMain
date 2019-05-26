@@ -14,9 +14,11 @@ import './Comparison.css';
 const { Content } = Layout;
 
 const commafy = (num, dot = false) => 
-  dot ? 
-    Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',') + ((num - Math.floor(num)).toFixed(6)).substring(1, ((num - Math.floor(num)).toFixed(6)).length)
-    : Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',');
+  num ?
+    dot ? 
+      Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',') + ((num - Math.floor(num)).toFixed(6)).substring(1, ((num - Math.floor(num)).toFixed(6)).length)
+      : Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',')
+    : 0;
 
 const visibleFieldsDataColumn = [
   {
@@ -59,6 +61,7 @@ const coinColumnsLong = [
     dataIndex: 'coin_title',
     className: 'column-name',
     colSpan: 2,
+    sorter: (a, b) => a.coin_title.localeCompare(b.coin_title),
     key: '2',
     render: (value, row, index) => ({
         children: value,
@@ -90,145 +93,168 @@ const coinColumnsLong = [
     dataIndex: 'asset_price_old',
     key: '6',        
     sorter: (a, b) => a.asset_price_old - b.asset_price_old,
-    render: value => '$' + commafy(value, true)
+    render: value => '$' + commafy(value, true, 6)
   },
   {
     title: 'Price change USD (24h)',
     dataIndex: 'price_change_24',
     key: '7',        
-    sorter: (a, b) => a.price_change_24 - b.price_change_24
+    sorter: (a, b) => a.price_change_24 - b.price_change_24,
+    render: value => commafy(value, true, 2) + '%'
   },
   {
     title: 'Volume 24h USD',
     dataIndex: 'volume_24_old',
     key: '8',        
-    sorter: (a, b) => a.volume_24_old - b.volume_24_old
+    sorter: (a, b) => a.volume_24_old - b.volume_24_old,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Volume change (24h)',
     dataIndex: 'volume_change_24',
     key: '9',        
-    sorter: (a, b) => a.volume_change_24 - b.volume_change_24
+    sorter: (a, b) => a.volume_change_24 - b.volume_change_24,
+    render: value => commafy(value, true, 2) + '%'
   },
   {
     title: 'Twitter list',
     dataIndex: 'twitter_list',
     key: '10',        
-    sorter: (a, b) => a.twitter_list - b.twitter_list
+    sorter: (a, b) => a.twitter_list - b.twitter_list,
+    render: value => commafy(value)
   },
   {
     title: 'Twitter favorites',
     dataIndex: 'twitter_favorites',
     key: '11',        
-    sorter: (a, b) => a.twitter_favorites - b.twitter_favorites
+    sorter: (a, b) => a.twitter_favorites - b.twitter_favorites,
+    render: value => commafy(value)
   },
   {
     title: 'Twitter following',
     dataIndex: 'twitter_following',
     key: '12',        
-    sorter: (a, b) => a.twitter_following - b.twitter_following
+    sorter: (a, b) => a.twitter_following - b.twitter_following,
+    render: value => commafy(value)
   },
   {
     title: 'Twitter status',
     dataIndex: 'twitter_status',
     key: '13',        
-    sorter: (a, b) => a.twitter_status - b.twitter_status
+    sorter: (a, b) => a.twitter_status - b.twitter_status,
+    render: value => commafy(value)
   },
   {
     title: 'Twitter followers',
     dataIndex: 'twitter_followers',
     key: '14',        
-    sorter: (a, b) => a.twitter_followers - b.twitter_followers
+    sorter: (a, b) => a.twitter_followers - b.twitter_followers,
+    render: value => commafy(value)
   },
   {
     title: 'Reddit active users',
     dataIndex: 'reddit_active_users',
     key: '15',        
-    sorter: (a, b) => a.reddit_active_users - b.reddit_active_users
+    sorter: (a, b) => a.reddit_active_users - b.reddit_active_users,
+    render: value => commafy(value)
   },
   {
     title: 'Reddit posts',
     dataIndex: 'reddit_posts',
     key: '16',        
-    sorter: (a, b) => a.reddit_posts - b.reddit_posts
+    sorter: (a, b) => a.reddit_posts - b.reddit_posts,
+    render: value => commafy(value)
   },
   {
     title: 'Reddit comments',
     dataIndex: 'reddit_comments',
     key: '17',        
-    sorter: (a, b) => a.reddit_comments - b.reddit_comments
+    sorter: (a, b) => a.reddit_comments - b.reddit_comments,
+    render: value => commafy(value)
   },
   {
     title: 'Reddit subscribers',
     dataIndex: 'reddit_subscribers',
     key: '18',        
-    sorter: (a, b) => a.reddit_subscribers - b.reddit_subscribers
+    sorter: (a, b) => a.reddit_subscribers - b.reddit_subscribers,
+    render: value => commafy(value)
   },
   {
     title: 'Github Closed issues',
     dataIndex: 'github_closed_issues',
     key: '19',        
-    sorter: (a, b) => a.github_closed_issues - b.github_closed_issues
+    sorter: (a, b) => a.github_closed_issues - b.github_closed_issues,
+    render: value => commafy(value)
   },
   {
     title: 'Github Open pull issues',
     dataIndex: 'github_open_pull_issues',
     key: '20',        
-    sorter: (a, b) => a.github_open_pull_issues - b.github_open_pull_issues
+    sorter: (a, b) => a.github_open_pull_issues - b.github_open_pull_issues,
+    render: value => commafy(value)
   },
   {
     title: 'Github Closed pull issues',
     dataIndex: 'github_closed_pull_issues',
     key: '21',        
-    sorter: (a, b) => a.github_closed_pull_issues - b.github_closed_pull_issues
+    sorter: (a, b) => a.github_closed_pull_issues - b.github_closed_pull_issues,
+    render: value => commafy(value)
   },
   {
     title: 'Github Forks',
     dataIndex: 'github_forks',
     key: '22',        
-    sorter: (a, b) => a.github_forks - b.github_forks
+    sorter: (a, b) => a.github_forks - b.github_forks,
+    render: value => commafy(value)
   },
   {
     title: 'Github Subscribers',
     dataIndex: 'github_subscribers',
     key: '24',        
-    sorter: (a, b) => a.github_subscribers - b.github_subscribers
+    sorter: (a, b) => a.github_subscribers - b.github_subscribers,
+    render: value => commafy(value)
   },
   {
     title: 'Github',
     dataIndex: 'github_stars',
     key: '25',        
-    sorter: (a, b) => a.github_stars - b.github_stars
+    sorter: (a, b) => a.github_stars - b.github_stars,
+    render: value => commafy(value)
   },
   {
     title: 'Volatilty 30 day (USD)',
     dataIndex: 'volatility_30_usd',
     key: '26',        
-    sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd
+    sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd,
+    render: value => commafy(value, true, 2)
   },
   {
     title: 'Volatilty 60 days (USD)',
     dataIndex: 'volatility_60_usd',
     key: '27',        
-    sorter: (a, b) => a.volatility_60_usd - b.volatility_60_usd
+    sorter: (a, b) => a.volatility_60_usd - b.volatility_60_usd,
+    render: value => commafy(value, true, 2)
   },
   {
     title: 'Volatilty 120 days (USD)',
     dataIndex: 'volatility_120_usd',
     key: '28',        
-    sorter: (a, b) => a.volatility_120_usd - b.volatility_120_usd
+    sorter: (a, b) => a.volatility_120_usd - b.volatility_120_usd,
+    render: value => commafy(value, true, 2) 
   },
   {
     title: 'Volatilty 1 year (USD)',
     dataIndex: 'volatility_year_usd',
     key: '29',        
-    sorter: (a, b) => a.volatility_year_usd - b.volatility_year_usd
+    sorter: (a, b) => a.volatility_year_usd - b.volatility_year_usd,
+    render: value => commafy(value, true, 2) 
   },
   {
     title: 'ATH (USD)',
     dataIndex: 'ath',
     key: '30',        
-    sorter: (a, b) => a.ath - b.ath
+    sorter: (a, b) => a.ath - b.ath,
+    render: value => '$' + commafy(value, true, 6)
   },
   {
     title: 'Days since ATH (USD)',
@@ -240,13 +266,15 @@ const coinColumnsLong = [
     title: 'ATH/Current Price (USD)',
     dataIndex: 'current_div_ath_usd',
     key: '32',        
-    sorter: (a, b) => a.current_div_ath_usd - b.current_div_ath_usd
+    sorter: (a, b) => a.current_div_ath_usd - b.current_div_ath_usd,
+    render: value => commafy(value, true, 2)
   },
   {
     title: 'ATL (USD)',
     dataIndex: 'atl',
     key: '33',
-    sorter: (a, b) => a.atl - b.atl
+    sorter: (a, b) => a.atl - b.atl,
+    render: value => '$' + commafy(value, true, 6)
   },
   {
     title: 'Days since ATL (USD)',
@@ -300,85 +328,99 @@ const coinColumnsLong = [
     title: 'Buy Support 1%',
     dataIndex: 'buy_support_1',
     key: '42',        
-    sorter: (a, b) => a.buy_support_1 - b.buy_support_1
+    sorter: (a, b) => a.buy_support_1 - b.buy_support_1,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 2%',
     dataIndex: 'buy_support_2',
     key: '43',        
-    sorter: (a, b) => a.buy_support_2 - b.buy_support_2
+    sorter: (a, b) => a.buy_support_2 - b.buy_support_2,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 3%',
     dataIndex: 'buy_support_3',
     key: '44',        
-    sorter: (a, b) => a.buy_support_3 - b.buy_support_3
+    sorter: (a, b) => a.buy_support_3 - b.buy_support_3,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 4%',
     dataIndex: 'buy_support_4',
     key: '45',        
-    sorter: (a, b) => a.buy_support_4 - b.buy_support_4
+    sorter: (a, b) => a.buy_support_4 - b.buy_support_4,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 5%',
     dataIndex: 'buy_support_5',
     key: '46',        
-    sorter: (a, b) => a.buy_support_5 - b.buy_support_5
+    sorter: (a, b) => a.buy_support_5 - b.buy_support_5,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 10%',
     dataIndex: 'buy_support_10',
     key: '47',        
-    sorter: (a, b) => a.buy_support_10 - b.buy_support_10
+    sorter: (a, b) => a.buy_support_10 - b.buy_support_10,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy Support 15%',
     dataIndex: 'buy_support_15',
     key: '48',        
-    sorter: (a, b) => a.buy_support_15 - b.buy_support_15
+    sorter: (a, b) => a.buy_support_15 - b.buy_support_15,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 1%',
     dataIndex: 'sell_support_1',
     key: '49',        
-    sorter: (a, b) => a.sell_support_1 - b.sell_support_1
+    sorter: (a, b) => a.sell_support_1 - b.sell_support_1,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 2%',
     dataIndex: 'sell_support_2',
     key: '50',        
-    sorter: (a, b) => a.sell_support_2 - b.sell_support_2
+    sorter: (a, b) => a.sell_support_2 - b.sell_support_2,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 3%',
     dataIndex: 'sell_support_3',
     key: '51',        
-    sorter: (a, b) => a.sell_support_3 - b.sell_support_3
+    sorter: (a, b) => a.sell_support_3 - b.sell_support_3,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 4%',
     dataIndex: 'sell_support_4',
     key: '52',        
-    sorter: (a, b) => a.sell_support_4 - b.sell_support_4
+    sorter: (a, b) => a.sell_support_4 - b.sell_support_4,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 5%',
     dataIndex: 'sell_support_5',
     key: '53',        
-    sorter: (a, b) => a.sell_support_5 - b.sell_support_5
+    sorter: (a, b) => a.sell_support_5 - b.sell_support_5,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 10%',
     dataIndex: 'sell_support_10',
     key: '54',        
-    sorter: (a, b) => a.sell_support_10 - b.sell_support_10
+    sorter: (a, b) => a.sell_support_10 - b.sell_support_10,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Sell Support 15%',
     dataIndex: 'sell_support_15',
     key: '55',        
-    sorter: (a, b) => a.sell_support_15 - b.sell_support_15
+    sorter: (a, b) => a.sell_support_15 - b.sell_support_15,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Buy 10%/Sell 10%',
@@ -412,6 +454,7 @@ const coinColumnsLong = [
   }
 ];
 
+
 export const Comparison = (props) => {
 
   const SHOW_LIMIT = 14;
@@ -420,9 +463,10 @@ export const Comparison = (props) => {
   const [selectedCoins, setSelected] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [compared, toCompare] = useState([]);
-  const [showComparison, toShow] = useState(false);
+  const [showComparison, toShow] = useState(false);  
   const [sleep, setSleep] = useState(null);
-  const [dynaColumn, setDynaColumn] = useState([]);
+  const [dynaColumn, setDynaColumn] = useState([]);  
+  const [loadingContent, setLoadingContent] = useState(true);
  
   const prevFields = useRef();
   const fetched = useListCoins();
@@ -469,13 +513,16 @@ export const Comparison = (props) => {
         body: JSON.stringify({ assets: formatted })
       }).then(response => response.json()).then(data => {        
         toCompare(data);
+        setLoadingContent(false);
       });
     }, 500));
   }, [selectedCoins]);
 
   useEffect(() => {
-    if (compared.length > 1) {
+
+    if (compared.length > 1) {      
       toShow(true);
+      setLoadingContent(false);
       setTimeout(() => {
         const allimages = document.getElementsByTagName('img');
         for (let i = 0; i < allimages.length; i++) {
@@ -505,6 +552,7 @@ export const Comparison = (props) => {
         className: 'column-name',
         colSpan: 2,
         key: '2',
+        sorter: (a, b) => a.coin_title.localeCompare(b.coin_title),
         render: (value, row, index) => ({
             children: value,
             props: {}
@@ -521,6 +569,7 @@ export const Comparison = (props) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
+      setLoadingContent(true);
       setSelected(selectedRows);
     },
     getCheckboxProps: record => ({
@@ -539,18 +588,18 @@ export const Comparison = (props) => {
     }
   };
   return (
-    <div>{console.log(dynaColumn, 'setDynaColumn')}
+    <div>
       <Layout>
         <Navigation activeNav="2" />
         <Layout>
           <CustomHeader />
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
             <div className='tableGroup' style={{ display: 'flex', margin: '24px 16px', padding: 24, background: '#fff', justifyContent: 'space-around' }}>
-              <Table key={0} rowKey={coin => coin.coin_id} style={{ width: '40%' }} rowSelection={rowSelection} dataSource={coins.sort(dynamicSort('full_name'))} columns={coinColumnsShort} size="small" />
+              <Table key={0} rowKey={coin => coin.coin_id} loading={coins.length > 0 ? false : true} style={{ width: '40%' }} rowSelection={rowSelection} dataSource={coins.sort(dynamicSort('full_name'))} columns={coinColumnsShort} size="small" />
               <Table key={1} rowKey={vfield => vfield.key} pagination={false} scroll={{ y: 400 }} title={() => 'Parameters'} showHeader={false} rowSelection={rowSelectionField} columns={visibleFieldsDataColumn} dataSource={visibleFieldsData} size="small" style={{ width: '40%' }} />
             </div>
             <div>
-              {showComparison && <Table key={3} className='showInfoTable' pagination={false} rowKey={coin => coin.coin_id} scroll={{ x: '100%' }} dataSource={compared.sort(dynamicSort('full_name'))} columns={dynaColumn} />}
+              <Table key={3} className='showInfoTable' loading={loadingContent} pagination={false} rowKey={coin => coin.coin_id} scroll={{ x: '100%' }} dataSource={compared.sort(dynamicSort('full_name'))} columns={dynaColumn}/>
             </div>
           </Content>
         </Layout>
