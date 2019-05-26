@@ -15,7 +15,19 @@ const { Content } = Layout;
 
 import './HomePage.css';
 
+function numberWithCommas(x) {
+    // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");    
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 
+function numberwith6decimals(x){
+  if(parseFloat(x).toFixed(6)!=parseFloat(x)){
+    return parseFloat(x).toFixed(6);
+  }
+  return x;
+}
 export const HomePage = () => {
 
   const [coins, toCoins] = useState([]);
@@ -33,46 +45,54 @@ export const HomePage = () => {
 
   const coinColumnsShort = [
   {
-    title:'#Marketcap',
+    title:'#',
     dataIndex:'mc_rank',
     key:'1',
     sorter: (a, b) => a.mc_rank - b.mc_rank,
   },
-  {
-      title: 'Icon',
-      dataIndex: 'img_url',
-      key: '14',              
-      render: image => <img src={loading} data-src={image} width="20" height="20" />
-    },
     {
-      title: 'Coin Name',
-      dataIndex: 'coin_symbol',
-      key: '2',              
-      render: (volume, row) => {
-        return row.coin_title;
-      }
+      title: 'Asset Name',
+      dataIndex: 'coin_title',
+      key: '2',             
+      sorter:(a,b) => a.coin_title - b.coin_title,
+      render: (volume, row) => (
+        <div><img src={loading} data-src={row.img_url} width="20" height="20" /> {row.coin_title}</div>
+      )
     },
     ,{
       title: 'Market Cap',
       dataIndex: 'market_cap',
       key: '3',
       sorter: (a, b) => a.market_cap - b.market_cap,
+      render: (volume, row) => {
+        if(row.market_cap)
+        return '$' + numberWithCommas(parseInt(row.market_cap).toFixed(0) || 0);
+      }
     },{
       title: 'Price',
       dataIndex: 'asset_price',
-      key: '4'
+      key: '4',
+      render: (volume, row) =>{
+        if(row.asset_price)
+          return '$' + numberwith6decimals(row.asset_price || 0);        
+      }
     },{
       title: 'Price Change (24H)',
       dataIndex: 'asset_price_old',
       key: '5',
       render: (price, row) => {
-        return `${Number.parseInt(((row.asset_price - price) / row.asset_price)*100)}%`;
+        if(row.asset_price)
+          return `${Number.parseInt(((row.asset_price - price) / row.asset_price)*100)}%`;
       },
       sorter: (a, b) => a.asset_price_old - b.asset_price_old,
     },{
       title: 'Volume (24H)',
       dataIndex: 'volume_24_old',
       key: '6',      
+      render: (volume, row) =>{
+        if(row.volume_24_old)
+        return "$" + numberWithCommas(parseInt(row.volume_24_old) || 0);
+      },
       sorter: (a, b) => a.volume_24_old - b.volume_24_old,
     },
     {
@@ -80,7 +100,8 @@ export const HomePage = () => {
       dataIndex: 'volume_24',
       key: '7',
       render: (volume, row) => {
-        return `${Number.parseInt(((volume - row.volume_24_old) / volume)*100)}%`;
+        if(row.volume_24)
+          return `${Number.parseInt(((volume - row.volume_24_old) / volume)*100)}%`;
       },
       sorter: (a, b) => a.volume_24 - b.volume_24,
     },
@@ -88,19 +109,28 @@ export const HomePage = () => {
       title: 'All Time High',
       dataIndex: 'ath',
       key: '8',
+      render: (volume, row) =>{
+        if(row.ath)
+          return '$' + numberWithCommas(numberwith6decimals(row.ath));
+      },
       sorter: (a, b) => a.ath - b.ath,
     },
     {
       title: 'All Time Low',
       dataIndex: 'atl',
       key: '9',
+      render: (volume, row) =>{
+        if(row.atl)
+        return '$' + numberwith6decimals(row.atl);
+      },
       sorter: (a, b) => a.atl - b.atl,
     },    {
       title: 'Buy Support 5%',
       dataIndex: 'buy_support_5',
       key: '10',
-      render: price => {
-        return Number.parseInt(price) || 0
+      render: (volume, row) => {
+        if(row.buy_support_5)
+        return '$' + numberWithCommas(Number.parseInt(row.buy_support_5) || 0);
       },
       sorter: (a, b) => a.buy_support_5 - b.buy_support_5,
     },
@@ -108,8 +138,9 @@ export const HomePage = () => {
       title: 'Sell Support 5%',
       dataIndex: 'sell_support_5',
       key: '11',
-      render: price => {
-        return Number.parseInt(price) || 0
+      render: (volume, row) => {
+        if(row.sell_support_5)
+        return '$' + numberWithCommas(Number.parseInt(row.sell_support_5) || 0 );
       },
       sorter: (a, b) => a.sell_support_5 - b.sell_support_5,
     },
@@ -120,9 +151,13 @@ export const HomePage = () => {
       sorter: (a, b) => a.ta_rating - b.ta_rating,
     },
     {
-      title: 'Volatility_30_USD',
+      title: 'Volatility 30 days',
       dataIndex: 'v_30_usd',
       key: '13',
+      render: (volume, row) => {
+        if(row.v_30_usd)
+        return Number.parseFloat(row.v_30_usd).toFixed(2);
+      },
       sorter: (a, b) => a.v_30_usd - b.v_30_usd,
     },
   ];

@@ -11,7 +11,7 @@ export const Login = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [success, setSuccess] = useState(false);
-  	const [alertSet, activateAlert] = useState(false);
+  const [alertSet, activateAlert] = useState(false);
 
 	const handleEmail = (e) => {
 		setEmail(e.target.value);
@@ -36,7 +36,7 @@ export const Login = (props) => {
 			method: 'POST',
 			headers: headers,
 			body: JSON.stringify({ email: email, password: password })
-		}).then(response => response.json()).then(data => {			
+		}).then(response => response.json()).then(data => {
 			if(data.message !== 'Auth failed') {
 				data.email = email;
 				localStorage.setItem('user', JSON.stringify(data));

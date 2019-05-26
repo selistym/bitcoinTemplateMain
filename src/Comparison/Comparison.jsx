@@ -10,7 +10,13 @@ import { useListCoins } from '../hooks';
 const loading = require('../_helpers/loading.gif');
 // helpers
 import { authHeader, dynamicSort } from '../_helpers';
+import './Comparison.css';
 const { Content } = Layout;
+
+const commafy = (num, dot = false) => 
+  dot ? 
+    Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',') + ((num - Math.floor(num)).toFixed(6)).substring(1, ((num - Math.floor(num)).toFixed(6)).length)
+    : Number(num.toFixed(0)).toLocaleString().split(/\s/).join(',');
 
 const visibleFieldsDataColumn = [
   {
@@ -40,6 +46,8 @@ const coinColumnsLong = [
   {
     title: 'Icon',
     dataIndex: 'img_url',
+    colSpan: 0,
+    className: 'column-icon',
     key: '1',
     render: image => {
       const link = 'https://cryptocompare.com' + image;
@@ -47,9 +55,15 @@ const coinColumnsLong = [
     }
   },
   {
-    title: 'Asset name',
+    title: 'Coin Name',
     dataIndex: 'coin_title',
-    key: '2'
+    className: 'column-name',
+    colSpan: 2,
+    key: '2',
+    render: (value, row, index) => ({
+        children: value,
+        props: {}
+      })
   },
   {
     title: 'TA score',
@@ -60,20 +74,23 @@ const coinColumnsLong = [
   {
     title: 'Token supply',
     dataIndex: 'token_supply',
-    key: '4',        
-    sorter: (a, b) => a.token_supply - b.token_supply
+    key: '4',
+    sorter: (a, b) => a.token_supply - b.token_supply,
+    render: value => commafy(value)
   },
   {
     title: 'Market Cap',
     dataIndex: 'market_cap',
     key: '5',        
-    sorter: (a, b) => a.market_cap - b.market_cap
+    sorter: (a, b) => a.market_cap - b.market_cap,
+    render: value => '$' + commafy(value)
   },
   {
     title: 'Price USD',
     dataIndex: 'asset_price_old',
     key: '6',        
-    sorter: (a, b) => a.asset_price_old - b.asset_price_old
+    sorter: (a, b) => a.asset_price_old - b.asset_price_old,
+    render: value => '$' + commafy(value, true)
   },
   {
     title: 'Price change USD (24h)',
@@ -221,9 +238,9 @@ const coinColumnsLong = [
   },
   {
     title: 'ATH/Current Price (USD)',
-    dataIndex: 'ath_div_current_usd',
+    dataIndex: 'current_div_ath_usd',
     key: '32',        
-    sorter: (a, b) => a.ath_div_current_usd - b.ath_div_current_usd
+    sorter: (a, b) => a.current_div_ath_usd - b.current_div_ath_usd
   },
   {
     title: 'ATL (USD)',
@@ -406,7 +423,7 @@ export const Comparison = (props) => {
   const [showComparison, toShow] = useState(false);
   const [sleep, setSleep] = useState(null);
   const [dynaColumn, setDynaColumn] = useState([]);
-  
+ 
   const prevFields = useRef();
   const fetched = useListCoins();
 
@@ -474,6 +491,8 @@ export const Comparison = (props) => {
       {
         title: 'Icon',
         dataIndex: 'img_url',
+        colSpan: 0,
+        className: 'column-icon',
         key: '1',
         render: image => {
           const link = 'https://cryptocompare.com' + image;
@@ -483,15 +502,19 @@ export const Comparison = (props) => {
       {
         title: 'Coin Name',
         dataIndex: 'coin_title',
-        key: '2'
+        className: 'column-name',
+        colSpan: 2,
+        key: '2',
+        render: (value, row, index) => ({
+            children: value,
+            props: {}
+          })
       }
     ];
 
     selectedRowKeys.forEach(e => {
       let row = visibleFieldsData.filter(p => p.key === e)[0];
-
-      replaces.push(...coinColumnsLong.filter(c => c.dataIndex === row.field));
-      
+      replaces.push(...coinColumnsLong.filter(c => c.dataIndex === row.field));      
     });
     setDynaColumn(replaces);
   }, [selectedRowKeys]);
@@ -527,7 +550,7 @@ export const Comparison = (props) => {
               <Table key={1} rowKey={vfield => vfield.key} pagination={false} scroll={{ y: 400 }} title={() => 'Parameters'} showHeader={false} rowSelection={rowSelectionField} columns={visibleFieldsDataColumn} dataSource={visibleFieldsData} size="small" style={{ width: '40%' }} />
             </div>
             <div>
-              {showComparison && <Table key={3} pagination={false} rowKey={coin => coin.coin_id} scroll={{ x: '100%' }} dataSource={compared.sort(dynamicSort('full_name'))} columns={dynaColumn} />}
+              {showComparison && <Table key={3} className='showInfoTable' pagination={false} rowKey={coin => coin.coin_id} scroll={{ x: '100%' }} dataSource={compared.sort(dynamicSort('full_name'))} columns={dynaColumn} />}
             </div>
           </Content>
         </Layout>
