@@ -28,6 +28,8 @@ function numberwith6decimals(x){
   }
   return x;
 }
+const getPriceChange = (asset_price, price) => Number.parseInt(((asset_price - price) / asset_price) * 100);
+const getVolumnChange = (volume, volume_24_old) => Number.parseInt(((volume - volume_24_old) / volume) * 100);
 export const HomePage = () => {
 
   const [coins, toCoins] = useState([]);
@@ -54,7 +56,7 @@ export const HomePage = () => {
       title: 'Asset Name',
       dataIndex: 'coin_title',
       key: '2',             
-      sorter:(a,b) => a.coin_title - b.coin_title,
+      sorter: (a, b) => a.coin_title.localeCompare(b.coin_title),
       render: (volume, row) => (
         <div><img src={loading} data-src={row.img_url} width="20" height="20" /> {row.coin_title}</div>
       )
@@ -75,23 +77,24 @@ export const HomePage = () => {
       render: (volume, row) =>{
         if(row.asset_price)
           return '$' + numberwith6decimals(row.asset_price || 0);        
-      }
+      },
+      sorter: (a, b) => a.asset_price - b.asset_price,
     },{
       title: 'Price Change (24H)',
       dataIndex: 'asset_price_old',
       key: '5',
       render: (price, row) => {
         if(row.asset_price)
-          return `${Number.parseInt(((row.asset_price - price) / row.asset_price)*100)}%`;
+          return getPriceChange(row.asset_price, price) + '%'
       },
-      sorter: (a, b) => a.asset_price_old - b.asset_price_old,
+      sorter: (a, b) => getPriceChange(a.asset_price, a.asset_price_old) - getPriceChange(b.asset_price, b.asset_price_old)
     },{
       title: 'Volume (24H)',
       dataIndex: 'volume_24_old',
       key: '6',      
       render: (volume, row) =>{
         if(row.volume_24_old)
-        return "$" + numberWithCommas(parseInt(row.volume_24_old) || 0);
+          return "$" + numberWithCommas(parseInt(row.volume_24_old) || 0);
       },
       sorter: (a, b) => a.volume_24_old - b.volume_24_old,
     },
@@ -101,9 +104,9 @@ export const HomePage = () => {
       key: '7',
       render: (volume, row) => {
         if(row.volume_24)
-          return `${Number.parseInt(((volume - row.volume_24_old) / volume)*100)}%`;
+          return getVolumnChange(volume, row.volume_24_old) + '%';
       },
-      sorter: (a, b) => a.volume_24 - b.volume_24,
+      sorter: (a, b) => getVolumnChange(a.volume_24, a.volume_24_old) - getVolumnChange(b.volume_24, b.volume_24_old)
     },
     {
       title: 'All Time High',
@@ -172,7 +175,7 @@ export const HomePage = () => {
         <Layout>
           <CustomHeader />
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280}}>
-            <Table className="homeTable" rowKey={coin => coin.coin_id} pagination={false} dataSource={coins} columns={coinColumnsShort} size="small" />
+            <Table className="homeTable" loading={coins.length > 0 ? false : true} rowKey={coin => coin.coin_id} pagination={false} dataSource={coins} columns={coinColumnsShort} size="small" />
           </Content>
         </Layout>
       </Layout>
