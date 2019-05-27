@@ -9,9 +9,23 @@ import { Subscriptions } from '../Subscriptions';
 import { Exchange } from '../Exchange';
 import { Login } from '../LoginPage';
 import { PrivateRoute } from './PrivateRoute';
-
+import favicon from './fav.png';
+function changeFavicon(src) {
+  console.log('pass me?')
+  var link = document.createElement('link'),
+      oldLink = document.getElementById('dynamic-favicon');
+  link.id = 'dynamic-favicon';
+  link.rel = 'shortcut icon';
+  link.type = 'image/png/ico';
+  link.href = src;
+  if (oldLink) {
+   document.head.removeChild(oldLink);
+  }
+  document.head.appendChild(link);
+}
 export const App = () => {
   // returning application
+  changeFavicon(favicon)
   return (
     <Router>
       <div>

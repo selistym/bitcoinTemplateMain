@@ -15,7 +15,7 @@ export const Navigation = (props) => {
       <div style={{color:'white', height: 32, marginTop: 16, marginBottom: 50, textAlign: 'center' }}>
         <img src={logo} style={{ width: '70%' }} />
         <div style={{display:'flex', marginTop: 16, justifyContent:'center'}}>
-          <p style={{ fontSize: '12px', fontWeight:600 }}>Market Tool</p>
+          <p style={{ fontSize: '12px', fontWeight:600 }}>DTRA Intelligence Tool</p>
           <p style={{ color: '#f1b044', fontSize: '12px', fontWeight:600 }}>&nbsp;| Beta</p>
         </div>
       </div>

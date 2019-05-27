@@ -155,13 +155,13 @@ export const HomePage = () => {
     },
     {
       title: 'Volatility 30 days',
-      dataIndex: 'v_30_usd',
+      dataIndex: 'volatility_30_usd',
       key: '13',
       render: (volume, row) => {
-        if(row.v_30_usd)
-        return Number.parseFloat(row.v_30_usd).toFixed(2);
+        if(row.volatility_30_usd)
+        return Number.parseFloat(row.volatility_30_usd).toFixed(2);
       },
-      sorter: (a, b) => a.v_30_usd - b.v_30_usd,
+      sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd,
     },
   ];
 

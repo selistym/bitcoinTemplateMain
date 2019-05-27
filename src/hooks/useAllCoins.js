@@ -13,7 +13,8 @@ export const useAllCoins = () => {
 	  	if(response.ok) return response.json();
 	  	else return JSON.stringify({ error: '500' });
 	  }).then(data => {
-	  	if(data.error) return;
+			if(data.error) return;
+			console.log(data, 'returned ')
 	    const formatted = data.map(c => {
 	      const link = 'https://cryptocompare.com' + c.img_url;
 	      delete c.img_url;
