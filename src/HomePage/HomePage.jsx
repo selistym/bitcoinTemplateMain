@@ -16,20 +16,25 @@ const { Content } = Layout;
 import './HomePage.css';
 
 function numberWithCommas(x) {
-  // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");    
-  var parts = x.toString().split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return parts.join(".");
+  // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if(x){
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  }
+  return '';  
 }
 
 function numberwith6decimals(x) {
-  if (parseFloat(x).toFixed(6) != parseFloat(x)) {
-    return parseFloat(x).toFixed(6);
+  if(x){
+    if (parseFloat(x).toFixed(6) != parseFloat(x)) {
+      return parseFloat(x).toFixed(6);
+    }
+    return x;
   }
-  return x;
+  return '';  
 }
-const getPriceChange = (asset_price, price) => Number.parseInt(((asset_price - price) / asset_price) * 100);
-const getVolumnChange = (volume, volume_24_old) => Number.parseInt(((volume - volume_24_old) / volume) * 100);
+
 export const HomePage = () => {
 
   const [coins, toCoins] = useState([]);
@@ -50,8 +55,7 @@ export const HomePage = () => {
       title: '#',
       dataIndex: 'mc_rank',
       key: '1',
-      sorter: (a, b) => a.mc_rank - b.mc_rank,
-      width: 100,
+      sorter: (a, b) => a.mc_rank - b.mc_rank,      
     },
     {
       title: 'Asset Name',
@@ -61,73 +65,62 @@ export const HomePage = () => {
       render: (volume, row) => (
         <div><img src={loading} data-src={row.img_url} width="20" height="20" /> {row.coin_title}</div>
       ),
-      width: 180,
-    },
+      
+    }
     , {
       title: 'Market Cap',
-      dataIndex: 'market_cap',
+      dataIndex: 'market_cap_usd',
       key: '3',
-      sorter: (a, b) => a.market_cap - b.market_cap,
+      sorter: (a, b) => a.market_cap_usd - b.market_cap_usd,
       render: (volume, row) => {
-        if (row.market_cap)
-          return '$' + numberWithCommas(parseInt(row.market_cap).toFixed(0) || 0);
+        if (volume)
+          return '$' + numberWithCommas(parseInt(volume).toFixed(0) || 0);
       },
-      width: 180,
+      
     }, {
       title: 'Price',
       dataIndex: 'asset_price',
       key: '4',
       render: (volume, row) => {
-        if (row.asset_price)
-          return '$' + numberWithCommas(numberwith6decimals(row.asset_price || 0));
+        if (row.asset_price){
+          if(row.asset_price > 100){
+            return <span style={{color: 'blue'}}>{'$' + numberWithCommas((row.asset_price || 0).toFixed(0))}</span>
+          }else if(row.asset_price < 1){
+            return <span style={{color: 'blue'}}>{'$' + numberwith6decimals(row.asset_price || 0)}</span>
+          }else{
+            return <span style={{color: 'blue'}}>{'$' + numberWithCommas((row.asset_price || 0).toFixed(2))}</span>
+          }          
+        }
       },
       sorter: (a, b) => a.asset_price - b.asset_price,
-      width: 180,
-    }, {
-      title: 'Price Change (24H)',
-      dataIndex: 'asset_price_old',
-      key: '5',
-      render: (price, row) => {
-        if (row.asset_price)
-          return getPriceChange(row.asset_price, price) + '%'
-      },
-      sorter: (a, b) => getPriceChange(a.asset_price, a.asset_price_old) - getPriceChange(b.asset_price, b.asset_price_old),
-      width: 180,
+      
     }, {
       title: 'Volume (24H)',
-      dataIndex: 'volume_24_old',
+      dataIndex: 'volume_24',
       key: '6',
       render: (volume, row) => {
-        if (row.volume_24_old)
-          return "$" + numberWithCommas(parseInt(row.volume_24_old) || 0);
+        if (volume)
+          return <span style={{color: 'blue'}}>{"$" + numberWithCommas(parseInt(volume) || 0)}</span>
       },
-      sorter: (a, b) => a.volume_24_old - b.volume_24_old,
-      width: 180,
-    },
-    {
-      title: 'Volume Change',
-      dataIndex: 'volume_24',
-      key: '7',
-      render: (volume, row) => {
-        if (row.volume_24)
-          return getVolumnChange(volume, row.volume_24_old) + '%';
-      },
-      sorter: (a, b) => getVolumnChange(a.volume_24, a.volume_24_old) - getVolumnChange(b.volume_24, b.volume_24_old),
-      width: 180,
-    },
-    {
-      title: 'All Time High',
+      sorter: (a, b) => a.volume_24 - b.volume_24,
+      
+    },{
+      title: 'ATH (USD)',
       dataIndex: 'ath',
       key: '8',
       render: (volume, row) => {
-        if (row.ath)
-          return '$' + numberWithCommas(numberwith6decimals(row.ath));
+        if(row.ath > 100){
+          return '$' + numberWithCommas((row.ath).toFixed(0));
+        }else if(row.ath < 1){
+          return '$' + (numberwith6decimals(row.ath));
+        }else{
+          return '$' + ((row.ath).toFixed(2));
+        }        
       },
-      sorter: (a, b) => a.ath - b.ath,
-      width: 180,
+      sorter: (a, b) => a.ath - b.ath,      
     },
     {
-      title: 'All Time Low',
+      title: 'ATL (USD)',
       dataIndex: 'atl',
       key: '9',
       render: (volume, row) => {
@@ -135,9 +128,8 @@ export const HomePage = () => {
           return '$' + numberwith6decimals(row.atl);
       },
       sorter: (a, b) => a.atl - b.atl,
-      width: 180,
-    },
-    {
+      
+    },{
       title: 'Buy Support 5%',
       dataIndex: 'buy_support_5',
       key: '10',
@@ -146,7 +138,7 @@ export const HomePage = () => {
           return '$' + numberWithCommas(Number.parseInt(row.buy_support_5) || 0);
       },
       sorter: (a, b) => a.buy_support_5 - b.buy_support_5,
-      width: 180,
+      
     },
     {
       title: 'Sell Support 5%',
@@ -157,14 +149,37 @@ export const HomePage = () => {
           return '$' + numberWithCommas(Number.parseInt(row.sell_support_5) || 0);
       },
       sorter: (a, b) => a.sell_support_5 - b.sell_support_5,
-      width: 180,
+      
+    }, {
+      title: 'Price Change (24H)',
+      dataIndex: 'asset_price_old',
+      key: '5',
+      render: (price, row) => {
+        if (price){          
+          return <span style={{color: price >= 0 ? 'green' : 'red'}}>{price} %</span>
+        }
+      },
+      sorter: (a, b) => a.asset_price_old - b.asset_price_old,
+      
     },
+    {
+      title: 'Volume Change',
+      dataIndex: 'volume_change_24',
+      key: '7',
+      render: (volume, row) => {
+        if (volume){          
+          return <span style={{color: volume >= 0 ? 'green' : 'red'}}>{volume} %</span>
+        }
+      },
+      sorter: (a, b) => a.volume_change_24 - b.volume_change_24,
+      
+    },        
     {
       title: 'TA Rating',
       dataIndex: 'ta_rating',
       key: '12',
       sorter: (a, b) => a.ta_rating - b.ta_rating,
-      width: 180,
+      render: value => <span style={{fontWeight:'bold'}}>{value}</span>
     },
     {
       title: 'Volatility 30 days',
@@ -174,7 +189,8 @@ export const HomePage = () => {
         if (row.volatility_30_usd)
           return Number.parseFloat(row.volatility_30_usd).toFixed(2);
       },
-      sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd,      
+      sorter: (a, b) => a.volatility_30_usd - b.volatility_30_usd,
+      
     },
   ];
 
@@ -187,14 +203,8 @@ export const HomePage = () => {
         <Navigation activeNav="1" />
         <Layout>
           <CustomHeader />
-          <Content style={{margin: '24px', padding:'30px', background: '#fff'}}>
-            <Table className="homeTable" 
-              loading={coins.length > 0 ? false : true} 
-              rowKey={coin => coin.coin_id}
-              scroll={{y: 1050}}
-              pagination={false} 
-              dataSource={coins} 
-              columns={coinColumnsShort} />
+          <Content style={{ margin: '24px 16px', padding: 30, background: '#fff', minHeight: 280 }}>
+            <Table className="homeTable" loading={coins.length > 0 ? false : true} rowKey={coin => coin.coin_id} pagination={false}  dataSource={coins} columns={coinColumnsShort} />
           </Content>
         </Layout>
       </Layout>
