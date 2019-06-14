@@ -1,0 +1,8 @@
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background: #252525;
+    -webkit-box-shadow: 0 2px 8px rgba(0,0,0,.45) inset;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.45);
+}
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected, .ant-menu.ant-menu-dark .ant-menu-item-selected {
+    background-color: #f0ad4e;
+}

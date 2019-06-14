@@ -130,7 +130,7 @@ export const Weight = (props) => {
       key: '3'
     },
     {
-      title: 'Market Cap',
+      title: 'Marketcap',
       dataIndex: 'market_cap',
       key: '4'
     },
@@ -175,7 +175,7 @@ export const Weight = (props) => {
                   <td><Slider min={0} max={5} tooltipVisible={true} defaultValue={volume} id='v7days' onAfterChange={setVolume} /></td>
                 </tr>
                 <tr style={{ height: '75px' }}>
-                  <td style={{ width: '20%' }}><p>Market Cap: </p></td>
+                  <td style={{ width: '20%' }}><p>Markecap: </p></td>
                   <td><Slider min={0} max={5} tooltipVisible={true} defaultValue={cap} id='mcap' onAfterChange={setCap} /></td>
                 </tr>
                 <tr style={{ height: '75px' }}>

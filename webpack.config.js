@@ -1,6 +1,5 @@
 const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
 module.exports = {
   mode: 'development',
   resolve: {
@@ -21,8 +20,7 @@ module.exports = {
       {
         test: /\.less$/,
         loader: ['less-loader']// compiles Less to CSS
-      },
-      {
+      },{
         test: /\.(png|jp(e*)g|svg|gif)$/,  
         use: [{
           loader: 'url-loader',
@@ -34,16 +32,18 @@ module.exports = {
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin({
-    template: './src/index.html'
-  })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    })
+  ],  
   devServer: {
     historyApiFallback: true
   },
   externals: {
     // global app config object
     config: JSON.stringify({
-      apiUrl: 'https://backend.dtra.io'
+      apiUrl: 'https://stbe.dtra.io'
     })
   }
 }

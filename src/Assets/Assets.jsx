@@ -12,7 +12,7 @@ import Img from "react-image";
 
 const { Content } = Layout;
 
-import "./Exchange.css";
+import "./Assets.css";
 import { CustomTableHeader } from "../CustomTableHeader";
 
 const numberWithCommas = x => {
@@ -34,7 +34,7 @@ const options = [
   { value: "2", label: "ETH" }
 ];
 
-export const Exchange = () => {
+export const Assets = () => {
   const currency_sign = ["$", "Ƀ", "Ξ"];
   const currency_letter = ["usd", "btc", "eth"];
   const currency_upper_letter = ["USD", "BTC", "ETH"];
@@ -280,7 +280,7 @@ export const Exchange = () => {
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
               <div className="col-sm-6 " style={{textAlign:'left', width:'100%'}}>
-                <span style={{fontSize:'16pt', fontWeight:'bold'}}>EXCHANGE({coins.length})</span>
+                <span style={{fontSize:'16pt', fontWeight:'bold'}}>ASSETS({coins.length})</span>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
                 {/* <Input

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 // routing
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 // components
+
+import { loadReCaptcha } from 'react-recaptcha-google';
 import { HomePage } from '../HomePage';
-import { Comparison } from '../Comparison';
-import { Weight } from '../Weight';
-import { Subscriptions } from '../Subscriptions';
-import { Exchange } from '../Exchange';
 import { Login } from '../LoginPage';
 import { PrivateRoute } from './PrivateRoute';
+import { ResetPassword } from '../ResetPassword';
+import { ForgotPassword } from '../ForgotPassword';
+
 import favicon from './fav.png';
-function changeFavicon(src) {
-  console.log('pass me?')
+function changeFavicon(src) {  
   var link = document.createElement('link'),
       oldLink = document.getElementById('dynamic-favicon');
   link.id = 'dynamic-favicon';
@@ -24,17 +24,21 @@ function changeFavicon(src) {
   document.head.appendChild(link);
 }
 export const App = () => {
+
+  const init = () => {
+  	loadReCaptcha();
+  }  
+  const recvToken = new URLSearchParams(location.search).get('token');
+  init();
   // returning application
   changeFavicon(favicon)
   return (
     <Router>
       <div>
-        <PrivateRoute p="/" c={HomePage} />
-        <PrivateRoute p="/comp" c={Comparison} />
-        <PrivateRoute p="/weight" c={Weight} />
-        <PrivateRoute p="/subscriptions" c={Subscriptions} />
-        <PrivateRoute p="/exchange" c={Exchange} />
+        <PrivateRoute p="/" c={HomePage} token={recvToken}/>        
         <Route path="/login" component={Login} />
+	      <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/forgot_password" component={ResetPassword} />
       </div>
     </Router>
   );
