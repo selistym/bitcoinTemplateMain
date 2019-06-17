@@ -5,6 +5,7 @@ import { Layout } from "antd";
 import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
+import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
 import Img from "react-image";
 import "./Exchange.css";
@@ -184,7 +185,10 @@ export const Exchange = () => {
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
               <div style={{textAlign:'left', width:'100%', marginBottom:'20px'}}>
-                <span style={{fontSize:'14pt'}}>Top selected Exchanges by DTRA team({coins.length})</span>
+                <span data-tip data-for='exchange_title_tip' style={{fontSize:'14pt'}}>Top selected Exchanges by DTRA team({coins.length})</span>
+                <ReactTooltip id='exchange_title_tip' type='warning' effect='solid'>
+                  <span>Exchange title</span>
+                </ReactTooltip>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
               </div>

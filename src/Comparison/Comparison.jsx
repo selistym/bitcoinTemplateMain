@@ -8,6 +8,7 @@ import Img from "react-image";
 // helpers
 import { authHeader, dynamicSort } from "../_helpers";
 import ReactTable from "react-table";
+import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
 import { TokenChecker } from "./TokenChecker";
 import { FieldChecker } from "./FieldChecker";
@@ -1883,7 +1884,10 @@ export const Comparison = React.memo(() => {
           }}
         >
           <div className="row" style={{ paddingBottom: "10px" }}>
-            <span style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
+            <span data-tip data-for='comparison_title_tip' style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
+            <ReactTooltip id='comparison_title_tip' type='warning' effect='solid'>
+                <span>Comparison title</span>
+            </ReactTooltip>
           </div>
           <div className="row">
             <span style={{ fontSize: "12pt" }}>
@@ -1963,7 +1967,7 @@ export const Comparison = React.memo(() => {
               loading={loadingContent}
               sortable={true}
               resizable={true}
-              pageSize={compared.length}
+              pageSize={compared.length + 1}
               showPagination={false}
               minRows={1}
             />

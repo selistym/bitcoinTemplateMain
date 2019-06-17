@@ -5,6 +5,7 @@ import { Layout, Icon, Input } from "antd";
 import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
+import ReactTooltip from 'react-tooltip';
 import "./Dictionary.css";
 
 const { Content } = Layout;
@@ -337,7 +338,10 @@ export const Dictionary = React.memo(() => {
             className="col-sm-6 "
             style={{ textAlign: "left", width: "100%", padding: "0px" }}
           >
-            <span style={{ fontSize: "14pt" }}>DICTIONARY</span>
+            <span data-tip data-for='dictionary_title_tip' style={{ fontSize: "14pt" }}>DICTIONARY</span>
+            <ReactTooltip id='dictionary_title_tip' type='warning' effect='solid'>
+              <span>Dictionary title</span>
+            </ReactTooltip>
           </div>
           <div
             className="col-sm-6 "
