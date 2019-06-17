@@ -5,15 +5,14 @@ import { Layout } from "antd";
 import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
-
 import Select from "react-select";
-const loading = require("../_helpers/loading.gif");
 import Img from "react-image";
-
-const { Content } = Layout;
 
 import "./Assets.css";
 import { CustomTableHeader } from "../CustomTableHeader";
+
+const { Content } = Layout;
+const loading = require("../_helpers/loading.gif");
 
 const numberWithCommas = x => {
   var parts = x.toString().split(".");
@@ -58,13 +57,9 @@ export const Assets = () => {
       accessor: "mc_rank",
       sortMethod: (a, b) => a - b,
       width: "40"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Name"} />,
-      accessor: "coin_title",
-      // Cell: (volume, row) => (
-      //   <div><img src={loading} data-src={row.img_url} width="20" height="20" /> {row.coin_title}</div>
-      // ),
+      accessor: "coin_title",      
       Cell: row => (
         <Fragment>
           <div className="tablehead">
@@ -74,8 +69,7 @@ export const Assets = () => {
         </Fragment>
       ),
       width: "16%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Marketcap"} />,
       accessor: "market_cap_" + currency_letter[Number(currency)],
       Cell: row => (
@@ -91,8 +85,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Price"} />,
       accessor: "asset_price_" + currency_letter[currency],
       Cell: row => {        
@@ -151,8 +144,7 @@ export const Assets = () => {
       },
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume (24h)"} />,
       accessor: "volume_24_" + currency_letter[currency],
       Cell: row => (
@@ -168,8 +160,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => (
         <CustomTableHeader title={"Supply Ratio (Current / Total) "} />
       ),
@@ -181,8 +172,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "13%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"ATH / ATL ("+currency_upper_letter[currency]+") Position"} />,
       accessor: "min_max_position_" + currency_letter[currency],
       Cell: row => (
@@ -192,8 +182,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "7%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Buy / Sell Support 5%"} />,
       accessor: "buy_div_sell_5",
       Cell: row => (
@@ -203,8 +192,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Price Change (24h)"} />,
       accessor: "price_change_24_" + currency_letter[currency],
       Cell: row => (
@@ -220,8 +208,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "6%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume Change (24h)"} />,
       accessor: "volume_change_24_usd",
       Cell: row => (
@@ -237,8 +224,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "6%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Market Momentum (7d)"} />,
       accessor: "market_momentum",
       Cell: row => (
@@ -250,8 +236,7 @@ export const Assets = () => {
       ),
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volatility (30d)"} />,
       accessor: "volatility_30_" + currency_letter[currency],
       Cell: row => (
@@ -263,9 +248,8 @@ export const Assets = () => {
       width: "3%"
     }
   ];
-  const changeCurrencyUnit = currency => {
-    setCurrency(currency.value);
-  };
+  const changeCurrencyUnit = currency => setCurrency(currency.value)
+
   return ( 
       <Content
         style={{
@@ -279,8 +263,8 @@ export const Assets = () => {
         {coins.length > 0 ? (
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
-              <div className="col-sm-6 " style={{textAlign:'left', width:'100%'}}>
-                <span style={{fontSize:'16pt', fontWeight:'bold'}}>ASSETS({coins.length})</span>
+              <div className="col-sm-6 " style={{textAlign:'left', width:'100%', padding:'0px'}}>
+                <span style={{fontSize:'14pt'}}>Top selected crypto-assets by DTRA team({coins.length})</span>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
                 {/* <Input
@@ -302,7 +286,7 @@ export const Assets = () => {
               data={coins}
               columns={coinColumns}
               showPagination={false}
-              className="homeTable"
+              className="assetTable"
               loading={coins.length > 0 ? false : true}
               rowKey={coin => coin.coin_id}
               defaultPageSize={coins.length}

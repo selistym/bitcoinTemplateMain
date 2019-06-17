@@ -13,8 +13,7 @@ export const useHeaders = () => {
 	  	if(response.ok) return response.json();
 	  	else return JSON.stringify({ error: '500' });
 	  }).then(data => {
-			if(data.error) return;
-			console.log(data, 'headers ')	    
+		if(data.error) return;			
 	    setHeaders(data);
 	  });
 	}, []);

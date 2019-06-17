@@ -7,10 +7,11 @@ import {Assets} from "../Assets";
 import {Comparison} from "../Comparison";
 import {Dictionary} from "../Dictionary";
 import {Exchange} from "../Exchange";
-
+import {Stable} from "../Stable";
 // Layout
 import { Layout} from "antd";
 import "./HomePage.css";
+import { Lbitcoin } from "../Lbitcoin";
 
 export const HomePage = () => {
   const [nav, setNav] = useState('assets');  
@@ -20,15 +21,17 @@ export const HomePage = () => {
   const conditionCmp = nav => {
     switch(nav){
       case 'assets':
-        return <Assets />;        
+        return <Assets />;
       case 'compare':
-        return <Comparison />;        
+        return <Comparison />;
       case 'dictionary':
         return <Dictionary />;
-      case 'exchange':
+      case 'exchanges':
         return <Exchange />;
-      default:
-        return <Assets />;        
+      case 'stable':
+            return <Stable />;
+      case 'lbitcoin':
+          return <Lbitcoin />;      
     }
   }
   return(

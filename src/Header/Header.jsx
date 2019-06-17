@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Dropdown, Button, Icon, Input } from "antd";
-const { Header } = Layout;
+import { Layout, Menu, Dropdown, Button } from "antd";
 
+const { Header } = Layout;
 const desktop = window.innerWidth > 1000;
-const desktopWide = window.innerWidth > 1330;
+
 import { useHeaders } from "../hooks";
 
 const numberWithCommas = x => {
@@ -14,19 +14,20 @@ const numberWithCommas = x => {
 };
 
 const innerMenu = () => {
+  console.log(localStorage);
   const username = JSON.parse(localStorage.getItem("user")).email;
-
+  console.log(username,"a");
   return (
-    <Menu>
-      {!desktop && (
+    <Menu style={{  zIndex:'9999' }}>
+      {/* {!desktop && ( */}
         <Menu.Item key="0">
-          <Link to="/" style={{ margin: 3 }}>
+          <Link to="/" style={{ margin: 3}}>
             {username}
           </Link>
         </Menu.Item>
-      )}
+      {/* )} */}
       <Menu.Item key="1">
-        <Link to="/login" style={{ margin: 3 }}>
+        <Link to="/login" style={{ margin: 3}}>
           Logout
         </Link>
       </Menu.Item>

@@ -1,20 +1,20 @@
 import React, { useEffect, useState, useRef, Fragment } from "react";
 import config from "config";
 import { Layout } from "antd";
-
 // custom hook
 import { useListCoins } from "../hooks";
-const loading = require("../_helpers/loading.gif");
+
 import Img from "react-image";
 // helpers
 import { authHeader, dynamicSort } from "../_helpers";
-import "./Comparison.css";
-const { Content } = Layout;
 import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
 import { TokenChecker } from "./TokenChecker";
 import { FieldChecker } from "./FieldChecker";
 
+import "./Comparison.css";
+const { Content } = Layout;
+const loading = require("../_helpers/loading.gif");
 const numberWithCommas = x => {
   var parts = x.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -41,135 +41,186 @@ const default_fields = [
 ];
 const fields = [
   {
-    section: 'Basic Market Data',
-    fields: [      
-      {label:"Token supply", field: "token_supply"},
-      {label:"Marketcap", field: "market_cap_usd"},
-      {label:"Price USD", field: "asset_price_usd"},
-      {label:"Price BTC", field: "asset_price_btc"},
-      {label:"Price ETH", field: "asset_price_eth"},
-      {label:"Volume 24h USD", field: "volume_24_usd"},
-      {label:"Volume 24h BTC", field: "volume_24_btc"},
-      {label:"Volume 24h ETH", field: "volume_24_eth"},
-      {label:"Volume change USD (24h)", field: "volume_change_24_usd"},
-      {label:"Volume change BTC (24h)", field: "volume_change_24_btc"},
-      {label:"Volume change ETH (24h)", field: "volume_change_24_eth"}      
+    section: "Basic Market Data",
+    fields: [
+      { label: "Token supply", field: "token_supply" },
+      { label: "Marketcap", field: "market_cap_usd" },
+      { label: "Price USD", field: "asset_price_usd" },
+      { label: "Price BTC", field: "asset_price_btc" },
+      { label: "Price ETH", field: "asset_price_eth" },
+      { label: "Volume 24h USD", field: "volume_24_usd" },
+      { label: "Volume 24h BTC", field: "volume_24_btc" },
+      { label: "Volume 24h ETH", field: "volume_24_eth" },
+      { label: "Volume change USD (24h)", field: "volume_change_24_usd" },
+      { label: "Volume change BTC (24h)", field: "volume_change_24_btc" },
+      { label: "Volume change ETH (24h)", field: "volume_change_24_eth" }
     ]
   },
   {
-    section: 'Price Change (%)',
+    section: "Price Change (%)",
     fields: [
-      {label:"Price change (24h) USD", field: "price_change_24_usd"},
-      {label:"Price change (24h) BTC", field: "price_change_24_btc"},
-      {label:"Price change (24h) ETH", field: "price_change_24_eth"},
-      {label:"Price change (7days) USD", field: "week_usd_change"},
-      {label:"Price change (7days) BTC", field: "week_btc_change"},
-      {label:"Price change (7days) ETH", field: "week_eth_change"}
+      { label: "Price change (24h) USD", field: "price_change_24_usd" },
+      { label: "Price change (24h) BTC", field: "price_change_24_btc" },
+      { label: "Price change (24h) ETH", field: "price_change_24_eth" },
+      { label: "Price change (7days) USD", field: "week_usd_change" },
+      { label: "Price change (7days) BTC", field: "week_btc_change" },
+      { label: "Price change (7days) ETH", field: "week_eth_change" }
     ]
-  },{
+  },
+  {
     section: "Price Ratios",
     fields: [
-      {label:"Mayer Multiple (USD)", field: "mayer_multiple_usd"},
-      {label:"Mayer Multiple (BTC)", field: "mayer_multiple_btc"},
-      {label:"Mayer Multiple (ETH)", field: "mayer_multiple_eth"},
-      {label:"30 days ratio (USD) Last 30d price avg / Past 30d price avg", field: "last30_div_past30_usd"},
-      {label:"30 days ratio (BTC) Last 30d price avg / Past 30d price avg", field: "last30_div_past30_btc"},
-      {label:"30 days ratio (ETH) Last 30d price avg / Past 30d price avg", field: "last30_div_past30_eth"},
-      {label:"60 days ratio (USD) Last 60d price avg / Past 60d price avg", field: "last60_div_past60_usd"},
-      {label:"60 days ratio (BTC) Last 60d price avg / Past 60d price avg", field: "last60_div_past60_btc"},
-      {label:"60 days ratio (ETH) Last 60d price avg / Past 60d price avg", field: "last60_div_past60_eth"},
-      {label:"120 days ratio (USD) Last 120d price avg / Past 120d price avg", field: "last120_div_past120_usd"},
-      {label:"120 days ratio (BTC) Last 120d price avg / Past 120d price avg", field: "last120_div_past120_btc"},
-      {label:"120 days ratio (ETH) Last 120d price avg / Past 120d price avg", field: "last120_div_past120_eth"},
-      {label:"1 year ratio (USD) Last year price avg / Past year price avg", field: "lastyear_div_pastyear_usd"},
-      {label:"1 year ratio (BTC) Last year price avg / Past year price avg", field: "lastyear_div_pastyear_btc"},
-      {label:"1 year ratio (ETH) Last year price avg / Past year price avg", field: "lastyear_div_pastyear_eth"}      
+      { label: "Mayer Multiple (USD)", field: "mayer_multiple_usd" },
+      { label: "Mayer Multiple (BTC)", field: "mayer_multiple_btc" },
+      { label: "Mayer Multiple (ETH)", field: "mayer_multiple_eth" },
+      {
+        label: "30 days ratio (USD) Last 30d price avg / Past 30d price avg",
+        field: "last30_div_past30_usd"
+      },
+      {
+        label: "30 days ratio (BTC) Last 30d price avg / Past 30d price avg",
+        field: "last30_div_past30_btc"
+      },
+      {
+        label: "30 days ratio (ETH) Last 30d price avg / Past 30d price avg",
+        field: "last30_div_past30_eth"
+      },
+      {
+        label: "60 days ratio (USD) Last 60d price avg / Past 60d price avg",
+        field: "last60_div_past60_usd"
+      },
+      {
+        label: "60 days ratio (BTC) Last 60d price avg / Past 60d price avg",
+        field: "last60_div_past60_btc"
+      },
+      {
+        label: "60 days ratio (ETH) Last 60d price avg / Past 60d price avg",
+        field: "last60_div_past60_eth"
+      },
+      {
+        label: "120 days ratio (USD) Last 120d price avg / Past 120d price avg",
+        field: "last120_div_past120_usd"
+      },
+      {
+        label: "120 days ratio (BTC) Last 120d price avg / Past 120d price avg",
+        field: "last120_div_past120_btc"
+      },
+      {
+        label: "120 days ratio (ETH) Last 120d price avg / Past 120d price avg",
+        field: "last120_div_past120_eth"
+      },
+      {
+        label: "1 year ratio (USD) Last year price avg / Past year price avg",
+        field: "lastyear_div_pastyear_usd"
+      },
+      {
+        label: "1 year ratio (BTC) Last year price avg / Past year price avg",
+        field: "lastyear_div_pastyear_btc"
+      },
+      {
+        label: "1 year ratio (ETH) Last year price avg / Past year price avg",
+        field: "lastyear_div_pastyear_eth"
+      }
     ]
-  },{
+  },
+  {
     section: "ATH/ATL",
     fields: [
-      {label:"ATH (USD)", field: "usd_ath"},
-      {label:"ATH (BTC)", field: "btc_ath"},
-      {label:"ATH (ETH)", field: "eth_ath"},
-      {label:"Days since ATH (USD)", field: "days_ath_usd"},
-      {label:"Days since ATH (BTC)", field: "days_ath_btc"},
-      {label:"Days since ATH (ETH)", field: "days_ath_eth"},
-      {label:"ATH/Current Price (USD)", field: "current_div_ath_usd"},
-      {label:"ATH/Current Price (BTC)", field: "current_div_ath_btc"},
-      {label:"ATH/Current Price (ETH)", field: "current_div_ath_eth"},
-      {label:"ATL (USD)", field: "usd_atl"},
-      {label:"ATL (BTC)", field: "btc_atl"},
-      {label:"ATL (ETH)", field: "eth_atl"},
-      {label:"Days since ATL (USD)", field: "days_atl_usd"},
-      {label:"Days since ATL (BTC)", field: "days_atl_btc"},
-      {label:"Days since ATL (ETH)", field: "days_atl_eth"},
-      {label:"ATL/Current Price (USD)", field: "atl_div_current_usd"},
-      {label:"ATL/Current Price (BTC)", field: "atl_div_current_btc"},
-      {label:"ATL/Current Price (ETH)", field: "atl_div_current_eth"},
-      {label:"MIN MAX POSITION (USD)", field: "min_max_position_usd"},
-      {label:"MIN MAX POSITION (BTC)", field: "min_max_position_btc"},
-      {label:"MIN MAX POSITION (ETH)", field: "min_max_position_eth"}      
+      { label: "ATH (USD)", field: "usd_ath" },
+      { label: "ATH (BTC)", field: "btc_ath" },
+      { label: "ATH (ETH)", field: "eth_ath" },
+      { label: "Days since ATH (USD)", field: "days_ath_usd" },
+      { label: "Days since ATH (BTC)", field: "days_ath_btc" },
+      { label: "Days since ATH (ETH)", field: "days_ath_eth" },
+      { label: "ATH/Current Price (USD)", field: "current_div_ath_usd" },
+      { label: "ATH/Current Price (BTC)", field: "current_div_ath_btc" },
+      { label: "ATH/Current Price (ETH)", field: "current_div_ath_eth" },
+      { label: "ATL (USD)", field: "usd_atl" },
+      { label: "ATL (BTC)", field: "btc_atl" },
+      { label: "ATL (ETH)", field: "eth_atl" },
+      { label: "Days since ATL (USD)", field: "days_atl_usd" },
+      { label: "Days since ATL (BTC)", field: "days_atl_btc" },
+      { label: "Days since ATL (ETH)", field: "days_atl_eth" },
+      { label: "ATL/Current Price (USD)", field: "atl_div_current_usd" },
+      { label: "ATL/Current Price (BTC)", field: "atl_div_current_btc" },
+      { label: "ATL/Current Price (ETH)", field: "atl_div_current_eth" },
+      { label: "MIN MAX POSITION (USD)", field: "min_max_position_usd" },
+      { label: "MIN MAX POSITION (BTC)", field: "min_max_position_btc" },
+      { label: "MIN MAX POSITION (ETH)", field: "min_max_position_eth" }
     ]
-  },{
+  },
+  {
     section: "Liquiduty",
     fields: [
-      {label:"Buy Support 1%", field: "buy_support_1"},
-      {label:"Buy Support 2%", field: "buy_support_2"},
-      {label:"Buy Support 3%", field: "buy_support_3"},
-      {label:"Buy Support 4%", field: "buy_support_4"},
-      {label:"Buy Support 5%", field: "buy_support_5"},
-      {label:"Buy Support 10%", field: "buy_support_10"},
-      {label:"Buy Support 15%", field: "buy_support_15"},
-      {label:"Sell Support 1%", field: "sell_support_1"},
-      {label:"Sell Support 2%", field: "sell_support_2"},
-      {label:"Sell Support 3%", field: "sell_support_3"},
-      {label:"Sell Support 4%", field: "sell_support_4"},
-      {label:"Sell Support 5%", field: "sell_support_5"},
-      {label:"Sell Support 10%", field: "sell_support_10"},
-      {label:"Sell Support 15%", field: "sell_support_15"},
-      {label:"Buy 5%/Sell 5%", field: "buy_div_sell_5"},
-      {label:"Buy 10%/Sell 10%", field: "buy_div_sell_10"},
-      {label:"Buy Support 10% / Marketcap", field: "buy_10_div_mcap"},
-      {label:"(Buy 10%/Sell 10%)^2 * (Buy 10%/Marketcap)", field: "amir_liquidity_metric"},
-      {label:"(Buy 10%-Sell 10%) / (Buy 10%+Sell 10%)", field: "andrey_liquidity_metric"}      
+      { label: "Buy Support 1%", field: "buy_support_1" },
+      { label: "Buy Support 2%", field: "buy_support_2" },
+      { label: "Buy Support 3%", field: "buy_support_3" },
+      { label: "Buy Support 4%", field: "buy_support_4" },
+      { label: "Buy Support 5%", field: "buy_support_5" },
+      { label: "Buy Support 10%", field: "buy_support_10" },
+      { label: "Buy Support 15%", field: "buy_support_15" },
+      { label: "Sell Support 1%", field: "sell_support_1" },
+      { label: "Sell Support 2%", field: "sell_support_2" },
+      { label: "Sell Support 3%", field: "sell_support_3" },
+      { label: "Sell Support 4%", field: "sell_support_4" },
+      { label: "Sell Support 5%", field: "sell_support_5" },
+      { label: "Sell Support 10%", field: "sell_support_10" },
+      { label: "Sell Support 15%", field: "sell_support_15" },
+      { label: "Buy 5%/Sell 5%", field: "buy_div_sell_5" },
+      { label: "Buy 10%/Sell 10%", field: "buy_div_sell_10" },
+      { label: "Buy Support 10% / Marketcap", field: "buy_10_div_mcap" },
+      {
+        label: "(Buy 10%/Sell 10%)^2 * (Buy 10%/Marketcap)",
+        field: "amir_liquidity_metric"
+      },
+      {
+        label: "(Buy 10%-Sell 10%) / (Buy 10%+Sell 10%)",
+        field: "andrey_liquidity_metric"
+      }
     ]
-  },{
+  },
+  {
     section: "Volatility",
     fields: [
-      {label:"Volatilty 30 day (USD)", field: "volatility_30_usd"},
-      {label:"Volatilty 30 day (BTC)", field: "volatility_30_btc"},
-      {label:"Volatilty 30 day (ETH)", field: "volatility_30_etc"},
-      {label:"Volatilty 60 days (USD)", field: "volatility_60_usd"},
-      {label:"Volatilty 60 days (BTC)", field: "volatility_60_btc"},
-      {label:"Volatilty 60 days (ETH)", field: "volatility_60_eth"},
-      {label:"Volatilty 120 days (USD)", field: "volatility_120_usd"},
-      {label:"Volatilty 120 days (BTC)", field: "volatility_120_btc"},
-      {label:"Volatilty 120 days (ETH)", field: "volatility_120_eth"},
-      {label:"Volatilty 1 year (USD)", field: "volatility_year_usd"},
-      {label:"Volatilty 1 year (BTC)", field: "volatility_year_btc"},
-      {label:"Volatilty 1 year (ETH)", field: "volatility_year_eth"}
+      { label: "Volatilty 30 day (USD)", field: "volatility_30_usd" },
+      { label: "Volatilty 30 day (BTC)", field: "volatility_30_btc" },
+      { label: "Volatilty 30 day (ETH)", field: "volatility_30_etc" },
+      { label: "Volatilty 60 days (USD)", field: "volatility_60_usd" },
+      { label: "Volatilty 60 days (BTC)", field: "volatility_60_btc" },
+      { label: "Volatilty 60 days (ETH)", field: "volatility_60_eth" },
+      { label: "Volatilty 120 days (USD)", field: "volatility_120_usd" },
+      { label: "Volatilty 120 days (BTC)", field: "volatility_120_btc" },
+      { label: "Volatilty 120 days (ETH)", field: "volatility_120_eth" },
+      { label: "Volatilty 1 year (USD)", field: "volatility_year_usd" },
+      { label: "Volatilty 1 year (BTC)", field: "volatility_year_btc" },
+      { label: "Volatilty 1 year (ETH)", field: "volatility_year_eth" }
     ]
-  },{
+  },
+  {
     section: "Social",
-    fields:[
-      {label:"Twitter followers", field: "twitter_followers"},
-      {label:"Twitter favorites", field: "twitter_favorites"},
-      {label:"Twitter following", field: "twitter_following"},
-      {label:"Twitter status", field: "twitter_status"},
-      {label:"Reddit active users", field: "reddit_active_users"},
-      {label:"Reddit posts", field: "reddit_posts_daily"},
-      {label:"Reddit comments", field: "reddit_comments_daily"},
-      {label:"Reddit subscribers", field: "reddit_subscribers"}      
+    fields: [
+      { label: "Twitter followers", field: "twitter_followers" },
+      { label: "Twitter favorites", field: "twitter_favorites" },
+      { label: "Twitter following", field: "twitter_following" },
+      { label: "Twitter status", field: "twitter_status" },
+      { label: "Reddit active users", field: "reddit_active_users" },
+      { label: "Reddit posts", field: "reddit_posts_daily" },
+      { label: "Reddit comments", field: "reddit_comments_daily" },
+      { label: "Reddit subscribers", field: "reddit_subscribers" }
     ]
-  },{
+  },
+  {
     section: "Development",
     fields: [
-      {label:"Github Closed issues", field: "github_closed_issues"},
-      {label:"Github Open pull issues", field: "github_open_pull_issues"},
-      {label:"Github Closed pull issues", field: "github_closed_pull_issues"},
-      {label:"Github Forks", field: "github_forks"},
-      {label:"Github Subscribers", field: "github_subscribers"},
-      {label:"Github", field: "github_stars"}
+      { label: "Github Closed issues", field: "github_closed_issues" },
+      { label: "Github Open pull issues", field: "github_open_pull_issues" },
+      {
+        label: "Github Closed pull issues",
+        field: "github_closed_pull_issues"
+      },
+      { label: "Github Forks", field: "github_forks" },
+      { label: "Github Subscribers", field: "github_subscribers" },
+      { label: "Github", field: "github_stars" }
     ]
   }
 ];
@@ -250,11 +301,11 @@ const colLong = [
             </Fragment>
           );
         } else if (row.value < 1) {
-          if(row.value <= 0.000000001){
+          if (row.value <= 0.000000001) {
             return (
               <Fragment>
                 <span style={{ color: "blue" }}>
-                  {"$" + (row.value).toPrecision(4)}
+                  {"$" + row.value.toPrecision(4)}
                 </span>
               </Fragment>
             );
@@ -301,11 +352,11 @@ const colLong = [
             </Fragment>
           );
         } else if (row.value < 1) {
-          if(row.value <= 0.000000001){
+          if (row.value <= 0.000000001) {
             return (
               <Fragment>
                 <span style={{ color: "blue" }}>
-                  {(row.value).toPrecision(4) + "₿"}                  
+                  {row.value.toPrecision(4) + "₿"}
                 </span>
               </Fragment>
             );
@@ -346,16 +397,16 @@ const colLong = [
           return (
             <Fragment>
               <span style={{ color: "blue" }}>
-                {numberWithCommas(row.value) + 'Ξ'}
+                {numberWithCommas(row.value) + "Ξ"}
               </span>
             </Fragment>
           );
         } else if (row.value < 1) {
-          if(row.value <= 0.000000001){
+          if (row.value <= 0.000000001) {
             return (
               <Fragment>
                 <span style={{ color: "blue" }}>
-                  {(row.value).toPrecision(4) + "Ξ"}                  
+                  {row.value.toPrecision(4) + "Ξ"}
                 </span>
               </Fragment>
             );
@@ -363,7 +414,7 @@ const colLong = [
           return (
             <Fragment>
               <span style={{ color: "blue" }}>
-                {numberWithCommas(numberWith6decimals(row.value)) + 'Ξ'}
+                {numberWithCommas(numberWith6decimals(row.value)) + "Ξ"}
               </span>
             </Fragment>
           );
@@ -371,7 +422,7 @@ const colLong = [
           return (
             <Fragment>
               <span style={{ color: "blue" }}>
-                {numberWithCommas(row.value.toFixed(2)) + 'Ξ'}
+                {numberWithCommas(row.value.toFixed(2)) + "Ξ"}
               </span>
             </Fragment>
           );
@@ -1587,9 +1638,7 @@ const colLong = [
   {
     label: "(Buy 10%/Sell 10%)^2 * (Buy 10%/Marketcap)",
     Header: () => (
-      <CustomTableHeader
-        title={"(Buy 10%/Sell 10%)^2 * (Buy 10%/Marketcap)"}
-      />
+      <CustomTableHeader title={"(Buy 10%/Sell 10%)^2 * (Buy 10%/Marketcap)"} />
     ),
     accessor: "amir_liquidity_metric",
     Cell: row => (
@@ -1622,46 +1671,46 @@ export const Comparison = React.memo(() => {
   const [currentPage, onPageChange] = useState(0);
   const [dynaColumn, setDynaColumn] = useState([]);
   const [loadingContent, setLoadingContent] = useState(true);
-  
-  const rowsField = useRef([]);  
+
+  const rowsField = useRef([]);
   const fetchedAll = useListCoins(false);
   const fetchedDefault = useListCoins(true);
 
   const onChangeToken = (coin_id, checked) => {
-    let reps = [];    
-    if(coin_id == 'token_all'){      
+    let reps = [];
+    if (coin_id == "token_all") {
       reps = checkStateOfToken.map(e => ({
         coin_id: e.coin_id,
         checked: checked
       }));
-    }else{
+    } else {
       reps = checkStateOfToken.map(e => ({
         coin_id: e.coin_id,
         checked: e.coin_id == coin_id ? checked : e.checked
       }));
     }
-
     setCheckStateOfToken(reps);
   };
-  const onChangeField = (field, checked) => {    
-    let reps = [];    
-    if(checked == true){      
-      if (checkStateOfField.filter(e => e.checked == true).length > SHOW_LIMIT) {        
+  const onChangeField = (field, checked) => {
+    let reps = [];
+    if (checked == true) {
+      if (
+        checkStateOfField.filter(e => e.checked == true).length > SHOW_LIMIT
+      ) {
         reps = [...checkStateOfField];
-        // NotificationManager.warning('Warning!', 'Max show fields are limited up to 15', 3000);
-        alert("Max show fields are limited up to 15.")
+        alert("Max show fields are limited up to 15.");
       } else {
         reps = checkStateOfField.map(e => ({
           field: e.field,
           checked: e.field == field ? checked : e.checked
         }));
-      }    
-    }else{
+      }
+    } else {
       reps = checkStateOfField.map(e => ({
         field: e.field,
         checked: e.field == field ? checked : e.checked
       }));
-    }    
+    }
     setCheckStateOfField(reps);
   };
   const colToken = [
@@ -1681,7 +1730,14 @@ export const Comparison = React.memo(() => {
             onChange={onChangeToken}
           />
         ),
-      Header: ({data}) => data && <TokenChecker coin_id={'token_all'} init={checkStateOfToken.filter(e => e.checked == false).length < 1} onChange={onChangeToken}/>,
+      Header: ({ data }) =>
+        data && (
+          <TokenChecker
+            coin_id={"token_all"}
+            init={checkStateOfToken.filter(e => e.checked == false).length < 1}
+            onChange={onChangeToken}
+          />
+        ),
       sortable: false,
       width: 45
     },
@@ -1697,14 +1753,20 @@ export const Comparison = React.memo(() => {
             </div>
           </Fragment>
         ),
-      filterMethod: (filter, row) => row.checkbox_token.coin_title.toLowerCase().includes(filter.value.toLowerCase()) || row.checkbox_token.coin_symbol.toLowerCase().includes(filter.value.toLowerCase()),
+      filterMethod: (filter, row) =>
+        row.checkbox_token.coin_title
+          .toLowerCase()
+          .includes(filter.value.toLowerCase()) ||
+        row.checkbox_token.coin_symbol
+          .toLowerCase()
+          .includes(filter.value.toLowerCase()),
       width: "60%"
     },
     {
       Header: "Symbol",
       accessor: "coin_symbol",
       width: "40%",
-      filterable: false,
+      filterable: false
       // filterMethod: (filter, row) => row.checkbox_token.coin_symbol.toLowerCase().includes(filter.value.toLowerCase()),
     }
   ];
@@ -1737,7 +1799,7 @@ export const Comparison = React.memo(() => {
         checked: checked
       });
     });
-    setCheckStateOfToken(rep_checks);    
+    setCheckStateOfToken(rep_checks);
     return () => clearTimeout();
   }, [fetchedAll, fetchedDefault]);
 
@@ -1755,12 +1817,12 @@ export const Comparison = React.memo(() => {
           body: JSON.stringify({ assets: formatted })
         })
           .then(response => response.json())
-          .then(data => {            
+          .then(data => {
             data.map(val => {
               val.img_url = "https://cryptocompare.com" + val.img_url;
               return val;
             });
-            setCompare(data);            
+            setCompare(data);
             setLoadingContent(false);
           });
       }, 500)
@@ -1802,34 +1864,46 @@ export const Comparison = React.memo(() => {
   }, [checkStateOfField]);
 
   return (
-      <Content
-        style={{
-          margin: "24px 16px",
-          padding: 24,
-          background: "#fff",
-          minHeight: 280
-        }}
-      >
-        {allCoins.length > 0 && compared.length > 0 ? ( 
+    <Content
+      style={{
+        margin: "24px 16px",
+        background: "#fff",
+        minHeight: 280
+      }}
+    >
+      {allCoins.length > 0 && compared.length > 0 ? (
         <div
           className="tableGroup"
           style={{
             margin: "24px 16px",
-            padding: 24,
+            padding: "20px",
+            paddingTop: "0px",
             background: "#fff",
             justifyContent: "space-around"
           }}
         >
-          <div className="row">
-            <span style={{fontSize:'16pt', fontFamily:'Poppins, Light'}}>COMPARE</span>
+          <div className="row" style={{ paddingBottom: "10px" }}>
+            <span style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
           </div>
-          <div className="row" style={{padding:'20px 0px 0px 0px'}}>
-            <div className=" col-md-6 col-lg-6" style={{marginBottom:'30px', padding: '0px 20px 0px 0px'}}>
-              {" "}                  
+          <div className="row">
+            <span style={{ fontSize: "12pt" }}>
+              The Following section is intended to allow you to compare
+              different assets. You may choose the assets and metrics/parameters
+              of your interest to see how one asset is located next to the
+              other.
+            </span>
+          </div>
+
+          <div className="row" style={{ padding: "20px 0px 0px 0px" }}>
+            <div
+              className=" col-md-6 col-lg-6"
+              style={{ marginBottom: "30px", padding: "0px 20px 0px 0px" }}
+            >
+              {" "}
               <ReactTable
                 data={allCoins.sort(dynamicSort("full_name"))}
                 columns={colToken}
-                style={{  height: "440px" }}
+                style={{ height: "440px" }}
                 loading={allCoins.length > 0 ? false : true}
                 rowKey={coin => coin.coin_id}
                 sortable={false}
@@ -1840,9 +1914,9 @@ export const Comparison = React.memo(() => {
                 defaultPageSize={allCoins.length}
                 onPageChange={page => onPageChange(page)}
               />
-            </div>                
-            <div className=" col-md-6 col-lg-6" style={{padding: 0}}>
-              {" "}                  
+            </div>
+            <div className=" col-md-6 col-lg-6" style={{ padding: 0 }}>
+              {" "}
               <ReactTable
                 data={fields}
                 columns={colFields}
@@ -1850,47 +1924,59 @@ export const Comparison = React.memo(() => {
                 defaultPageSize={fields.length}
                 showPagination={false}
                 className="-striped -highlight"
-                // filterable
-                SubComponent={row => 
-                  row.original.fields.map((e, k) =>
+                SubComponent={row =>
+                  row.original.fields.map((e, k) => (
                     <FieldChecker
                       key={k}
-                      field={e.field} 
+                      field={e.field}
                       init={
-                        checkStateOfField.filter(u => u.field == e.field)[0] ?
-                          checkStateOfField.filter(u => u.field == e.field)[0].checked : false
-                      } 
+                        checkStateOfField.filter(u => u.field == e.field)[0]
+                          ? checkStateOfField.filter(u => u.field == e.field)[0]
+                              .checked
+                          : false
+                      }
                       label={e.label}
-                      onChangeHandler={onChangeField}/>
-                  )
+                      onChangeHandler={onChangeField}
+                    />
+                  ))
                 }
-                style={{height: '440px'}}
+                style={{ height: "440px" }}
               />
             </div>
           </div>
           <div className="row">
-            <span style={{fontSize: '12pt', fontWeight:'bold'}}>Result</span>
+            <span style={{ fontSize: "12pt", fontWeight: "bold" }}>Result</span>
           </div>
-          <div className="row" style={{marginTop:'20px', justifyContent: 'center', textAlign:'center'}}>
-          {" "}
-          <ReactTable
+          <div
+            className="row"
+            style={{
+              marginTop: "20px",
+              justifyContent: "center",
+              textAlign: "center"
+            }}
+          >
+            {" "}
+            <ReactTable
               className="compTable"
               data={compared}
               columns={dynaColumn}
               loading={loadingContent}
               sortable={true}
-              resizable={true}                  
+              resizable={true}
               pageSize={compared.length}
-              showPagination={false}                    
+              showPagination={false}
               minRows={1}
             />
-            
           </div>
-        </div>)
-        : <div style={{width:'100%', textAlign: 'center'}}>
-            <span><img src={loading} width="20" height="20" />Loading...</span>
-          </div>
-        }
-      </Content>
+        </div>
+      ) : (
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <span>
+            <img src={loading} width="20" height="20" />
+            Loading...
+          </span>
+        </div>
+      )}
+    </Content>
   );
 });

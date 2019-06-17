@@ -1,6 +1,3 @@
-# react-hook-noredux-jwt-authentication
-
-
 # how to run in pm2
  - npm i -g pm2
  - cd /path/to/project

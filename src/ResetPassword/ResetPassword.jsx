@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import config from 'config';
 import { Link, Redirect } from 'react-router-dom';
 import { Icon, Alert } from 'antd';
-import LoginPage from '../LoginPage';
 import back from './back.png';
 
 export const ResetPassword = (props) => {
@@ -13,10 +12,6 @@ export const ResetPassword = (props) => {
 	const [success, setSuccess] = useState(false);
 	const [alertSet, activateAlert] = useState(false);
 	const recvToken = new URLSearchParams(props.location.search).get('token');
-	
-	const handleEmail = (e) => {
-		setEmail(e.target.value);
-	};
 
 	const handlePassword = (e) => {
 		setPassword(e.target.value);
@@ -33,16 +28,14 @@ export const ResetPassword = (props) => {
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('accept', 'application/json');
-		console.log("e");
+		
 		fetch(`${config.apiUrl}/auth/password/set`, {
 			method: 'POST',
 			headers: headers,
 			body: JSON.stringify({ token: recvToken, password: password })
-		}).then(response => response.json()).then(data => {
-			console.log(data.message);
+		}).then(response => response.json()).then(data => {			
 			if(data.message !== 'Auth failed') {
-				data.email = email;
-				//localStorage.setItem('user', JSON.stringify(data));
+				data.email = email;				
 				setSuccess(true);
 			} else {
 				activateAlert(true);
@@ -54,10 +47,10 @@ export const ResetPassword = (props) => {
 	}, [submitted]);
 
 	return (
-		<div className="custom" style={{ height: '100vh', width: '100vw', position: 'relative' }}>{console.log(success, 'set Success')}
+		<div className="custom" style={{ height: '100vh', width: '100vw', position: 'relative' }}>
 			<img src={back} style={{ height: '100%', width: '100%', position: 'absolute', zIndex: 1 }} />
 			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>
-        { alertSet && <Alert style={{ position: 'fixed', right: 0, zIndex: 999, margin: '10px 15px' }} message="Wrong email and/or password!" type="warning" /> }
+        		{ alertSet && <Alert style={{ position: 'fixed', right: 0, zIndex: 999, margin: '10px 15px' }} message="Wrong email and/or password!" type="warning" /> }
 				<div className="row">
 					<div className="col-sm-4 col-xs-1"></div>
 					<div className="col-sm-4 col-xs-10" style={{ padding: '50px 30px', background: 'white', borderRadius: '3px', marginTop: '25vh' }}>
@@ -77,7 +70,6 @@ export const ResetPassword = (props) => {
 										<div className="help-block">Password is required</div>
 									}
 								</div>
-
 								<br />
 								<div className="form-group">
 									<button className="btn btn-warning" style={{ width: '100%' }}>Reset Password</button>

@@ -5,7 +5,7 @@ import { Alert } from 'antd';
 import back from './back.png';
 import logo from './logo_beta_6.svg';
 
-export const Login = (props) => {
+export const Login = () => {
 
 	const [submitted, toSubmit] = useState(false);
 	const [email, setEmail] = useState('');

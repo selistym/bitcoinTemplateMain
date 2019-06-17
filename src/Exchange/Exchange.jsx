@@ -5,15 +5,12 @@ import { Layout } from "antd";
 import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
-
-import Select from "react-select";
-const loading = require("../_helpers/loading.gif");
-import Img from "react-image";
-
-const { Content } = Layout;
-
-import "./Exchange.css";
 import { CustomTableHeader } from "../CustomTableHeader";
+import Img from "react-image";
+import "./Exchange.css";
+
+const loading = require("../_helpers/loading.gif");
+const { Content } = Layout;
 
 const numberWithCommas = x => {
   var parts = x.toString().split(".");
@@ -28,16 +25,9 @@ const numberWith6decimals = x => {
   return x;
 };
 
-const options = [
-  { value: "0", label: "USD" },
-  { value: "1", label: "BTC" },
-  { value: "2", label: "ETH" }
-];
-
 export const Exchange = () => {
   const currency_sign = ["$", "Ƀ", "Ξ"];
-  const currency_letter = ["usd", "btc", "eth"];
-  const currency_upper_letter = ["USD", "BTC", "ETH"];
+  const currency_letter = ["usd", "btc", "eth"];  
 
   const [coins, toCoins] = useState([]);
   const [currency, setCurrency] = useState("0");
@@ -62,9 +52,6 @@ export const Exchange = () => {
     {
       Header: () => <CustomTableHeader title={"Name"} />,
       accessor: "coin_title",
-      // Cell: (volume, row) => (
-      //   <div><img src={loading} data-src={row.img_url} width="20" height="20" /> {row.coin_title}</div>
-      // ),
       Cell: row => (
         <Fragment>
           <div className="tablehead">
@@ -76,24 +63,7 @@ export const Exchange = () => {
       width: "16%"
     },
     {
-      Header: () => <CustomTableHeader title={"Marketcap"} />,
-      accessor: "market_cap_" + currency_letter[Number(currency)],
-      Cell: row => (
-        <Fragment>
-          <span className="textaligncenter">
-            {currency == "0"
-              ? currency_sign[Number(currency)] +
-                numberWithCommas(parseInt(row.value).toFixed(0) || 0)
-              : numberWithCommas(parseInt(row.value).toFixed(0) || 0) +
-                currency_sign[Number(currency)]}
-          </span>
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "8%"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Price"} />,
+      Header: () => <CustomTableHeader title={"Volume 24 Hr"} />,
       accessor: "asset_price_" + currency_letter[currency],
       Cell: row => {        
         if (row.value) {          
@@ -153,25 +123,8 @@ export const Exchange = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Volume (24h)"} />,
-      accessor: "volume_24_" + currency_letter[currency],
-      Cell: row => (
-        <Fragment>
-          <span style={{ color: "blue" }}>
-            {currency == "0"
-              ? currency_sign[currency] +
-                numberWithCommas(parseInt(row.value) || 0)
-              : numberWithCommas(parseInt(row.value) || 0) +
-                currency_sign[currency]}
-          </span>
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "8%"
-    },
-    {
       Header: () => (
-        <CustomTableHeader title={"Supply Ratio (Current / Total) "} />
+        <CustomTableHeader title={"Volume 24 Hr %"} />
       ),
       accessor: "supply_ratio",
       Cell: row => (
@@ -183,7 +136,7 @@ export const Exchange = () => {
       width: "13%"
     },
     {
-      Header: () => <CustomTableHeader title={"ATH / ATL ("+currency_upper_letter[currency]+") Position"} />,
+      Header: () => <CustomTableHeader title={"Number of Pairs"} />,
       accessor: "min_max_position_" + currency_letter[currency],
       Cell: row => (
         <Fragment>
@@ -194,78 +147,29 @@ export const Exchange = () => {
       width: "7%"
     },
     {
-      Header: () => <CustomTableHeader title={"Buy / Sell Support 5%"} />,
-      accessor: "buy_div_sell_5",
+      Header: () => <CustomTableHeader title={"Decenterized"} />,
+      accessor: "min_max_position_" + currency_letter[currency],
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(row.value.toFixed(2)) + "%" : 0}
+          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "8%"
+      width: "7%"
     },
     {
-      Header: () => <CustomTableHeader title={"Price Change (24h)"} />,
-      accessor: "price_change_24_" + currency_letter[currency],
+      Header: () => <CustomTableHeader title={"KYC"} />,
+      accessor: "min_max_position_" + currency_letter[currency],
       Cell: row => (
         <Fragment>
-          {row.value ? (
-            <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-              {numberWithCommas(row.value.toFixed(2)) + "%"}
-            </span>
-          ) : (
-            <span style={{ color: "green" }}>0%</span>
-          )}
+          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "6%"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Volume Change (24h)"} />,
-      accessor: "volume_change_24_usd",
-      Cell: row => (
-        <Fragment>
-          {row.value ? (
-            <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-              {numberWithCommas(row.value.toFixed(2)) + "%"}
-            </span>
-          ) : (
-            <span style={{ color: "green" }}>0%</span>
-          )}
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "6%"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Market Momentum (7d)"} />,
-      accessor: "market_momentum",
-      Cell: row => (
-        <Fragment>
-          <span style={{ fontWeight: "bold" }}>
-            {row.value ? row.value : 0}
-          </span>
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "8%"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Volatility (30d)"} />,
-      accessor: "volatility_30_" + currency_letter[currency],
-      Cell: row => (
-        <Fragment>
-          {row.value ? numberWithCommas(row.value.toFixed(2)) : 0}
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "3%"
+      width: "7%"
     }
   ];
-  const changeCurrencyUnit = currency => {
-    setCurrency(currency.value);
-  };
+  
   return ( 
       <Content
         style={{
@@ -279,30 +183,17 @@ export const Exchange = () => {
         {coins.length > 0 ? (
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
-              <div className="col-sm-6 " style={{textAlign:'left', width:'100%'}}>
-                <span style={{fontSize:'16pt', fontWeight:'bold'}}>EXCHANGE({coins.length})</span>
+              <div style={{textAlign:'left', width:'100%', marginBottom:'20px'}}>
+                <span style={{fontSize:'14pt'}}>Top selected Exchanges by DTRA team({coins.length})</span>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
-                {/* <Input
-                  placeholder="Search..."
-                  prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  style={{borderRadius:'4px', height: '38px', width:'250px', marginRight:'20px'}}
-                />                 */}
-                <Select
-                  className="Selector"
-                  value={currency.value}
-                  isSearchable={false}
-                  onChange={currency => changeCurrencyUnit(currency)}
-                  options={options}
-                  placeholder={"USD"} 
-                />
               </div>
             </div>
             <ReactTable
               data={coins}
               columns={coinColumns}
               showPagination={false}
-              className="homeTable"
+              className="exchangeTable"
               loading={coins.length > 0 ? false : true}
               rowKey={coin => coin.coin_id}
               defaultPageSize={coins.length}

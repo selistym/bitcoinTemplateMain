@@ -1,18 +1,14 @@
 import React from 'react';
-// routing
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-// components
-
-import { loadReCaptcha } from 'react-recaptcha-google';
 import { HomePage } from '../HomePage';
 import { Login } from '../LoginPage';
 import { PrivateRoute } from './PrivateRoute';
 import { ResetPassword } from '../ResetPassword';
 import { ForgotPassword } from '../ForgotPassword';
-
 import favicon from './fav.png';
-function changeFavicon(src) {  
-  var link = document.createElement('link'),
+
+const changeFavicon = src => {  
+  let link = document.createElement('link'),
       oldLink = document.getElementById('dynamic-favicon');
   link.id = 'dynamic-favicon';
   link.rel = 'shortcut icon';
@@ -23,15 +19,10 @@ function changeFavicon(src) {
   }
   document.head.appendChild(link);
 }
-export const App = () => {
-
-  const init = () => {
-  	loadReCaptcha();
-  }  
+export const App = () => {  
   const recvToken = new URLSearchParams(location.search).get('token');
-  init();
-  // returning application
-  changeFavicon(favicon)
+  changeFavicon(favicon);
+
   return (
     <Router>
       <div>
