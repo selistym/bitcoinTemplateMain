@@ -206,6 +206,7 @@ export const Lbitcoin = () => {
   const changeCurrencyUnit = currency => {
     setCurrency(currency.value);
   };
+  
   return (
     <Content
       style={{
@@ -229,7 +230,7 @@ export const Lbitcoin = () => {
               <span data-tip data-for='lbitcoin_title_tip' style={{ fontSize: "14pt" }}>
                 Localbitcoins transactions by country({coins.length})
               </span>
-              <ReactTooltip id='lbitcoin_title_tip' type='warning' effect='solid'>
+              <ReactTooltip id='lbitcoin_title_tip' effect='solid'>
                 <span>Lbitcoin title</span>
               </ReactTooltip>
             </div>

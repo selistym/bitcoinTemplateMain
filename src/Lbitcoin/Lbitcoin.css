@@ -24,3 +24,7 @@
 .tablehead {
 	text-align: left !important;
 }
+.customTooltipTheme {
+	background-color: white !important;
+	color: black !important;
+}

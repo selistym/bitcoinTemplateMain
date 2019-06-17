@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, Fragment } from "react";
+import React, { useEffect, useState, useRef, useMemo, Fragment } from "react";
 import config from "config";
 import { Layout } from "antd";
 // custom hook
@@ -1800,8 +1800,7 @@ export const Comparison = React.memo(() => {
         checked: checked
       });
     });
-    setCheckStateOfToken(rep_checks);
-    return () => clearTimeout();
+    setCheckStateOfToken(rep_checks);    
   }, [fetchedAll, fetchedDefault]);
 
   useEffect(() => {
@@ -1864,6 +1863,23 @@ export const Comparison = React.memo(() => {
     setDynaColumn(replaces);
   }, [checkStateOfField]);
 
+  const tableToken = useMemo(() => 
+    <ReactTable
+        data={allCoins.sort(dynamicSort("full_name"))}
+        columns={colToken}
+        style={{ height: "440px" }}
+        loading={allCoins.length > 0 ? false : true}
+        rowKey={coin => coin.coin_id}
+        sortable={false}
+        resizable={false}
+        filterable
+        showPageSizeOptions={false}
+        showPagination={false}
+        defaultPageSize={allCoins.length}
+        onPageChange={page => onPageChange(page)}
+    />
+  , [allCoins, checkStateOfToken]);
+  
   return (
     <Content
       style={{
@@ -1882,7 +1898,7 @@ export const Comparison = React.memo(() => {
             background: "#fff",
             justifyContent: "space-around"
           }}
-        >
+        >{console.log('rerender-comparison')}
           <div className="row" style={{ paddingBottom: "10px" }}>
             <span data-tip data-for='comparison_title_tip' style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
             <ReactTooltip id='comparison_title_tip' type='warning' effect='solid'>
@@ -1896,28 +1912,14 @@ export const Comparison = React.memo(() => {
               of your interest to see how one asset is located next to the
               other.
             </span>
-          </div>
-
-          <div className="row" style={{ padding: "20px 0px 0px 0px" }}>
+          </div>          
+          <div className="row" style={{ padding: "20px 0px 0px 0px" }}>          
             <div
-              className=" col-md-6 col-lg-6"
+              className="col-md-6 col-lg-6"
               style={{ marginBottom: "30px", padding: "0px 20px 0px 0px" }}
             >
               {" "}
-              <ReactTable
-                data={allCoins.sort(dynamicSort("full_name"))}
-                columns={colToken}
-                style={{ height: "440px" }}
-                loading={allCoins.length > 0 ? false : true}
-                rowKey={coin => coin.coin_id}
-                sortable={false}
-                resizable={false}
-                filterable
-                showPageSizeOptions={false}
-                showPagination={false}
-                defaultPageSize={allCoins.length}
-                onPageChange={page => onPageChange(page)}
-              />
+              {tableToken}
             </div>
             <div className=" col-md-6 col-lg-6" style={{ padding: 0 }}>
               {" "}
