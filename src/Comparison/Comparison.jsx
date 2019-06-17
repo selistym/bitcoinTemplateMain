@@ -1673,6 +1673,26 @@ export const Comparison = React.memo(() => {
   const [dynaColumn, setDynaColumn] = useState([]);
   const [loadingContent, setLoadingContent] = useState(true);
 
+  const originCol = useRef([
+    {
+      className: "column-icon",
+      Header: () => <CustomTableHeader title={"Name"} />,
+      accessor: "coin_title",
+      Cell: row =>
+        row && (
+          <Fragment>
+            <div className="comptablehead">
+              <Img src={row.original.img_url} width="20px" height="20px" />
+              &nbsp;&nbsp;{row.value}
+            </div>
+          </Fragment>
+        ),
+      sortMethod: (a, b) => {
+        return a.localeCompare(b);
+      },
+      width: "15%"
+    }
+  ]);
   const rowsField = useRef([]);
   const fetchedAll = useListCoins(false);
   const fetchedDefault = useListCoins(true);
@@ -1695,9 +1715,7 @@ export const Comparison = React.memo(() => {
   const onChangeField = (field, checked) => {
     let reps = [];
     if (checked == true) {
-      if (
-        checkStateOfField.filter(e => e.checked == true).length > SHOW_LIMIT
-      ) {
+      if (checkStateOfField.filter(e => e.checked == true).length > SHOW_LIMIT) {
         reps = [...checkStateOfField];
         alert("Max show fields are limited up to 15.");
       } else {
@@ -1705,12 +1723,17 @@ export const Comparison = React.memo(() => {
           field: e.field,
           checked: e.field == field ? checked : e.checked
         }));
+        colLong.forEach(e => {
+          if(e.accessor == field)
+            originCol.current.push(e);
+        });
       }
     } else {
       reps = checkStateOfField.map(e => ({
         field: e.field,
         checked: e.field == field ? checked : e.checked
       }));
+      originCol.current = originCol.current.filter(e => e.accessor != field);
     }
     setCheckStateOfField(reps);
   };
@@ -1782,8 +1805,11 @@ export const Comparison = React.memo(() => {
           field: e.accessor,
           checked: default_fields.includes(e.accessor)
         });
+        if(default_fields.includes(e.accessor)){
+          originCol.current.push({...e});
+        }
       }
-    });
+    });    
     setCheckStateOfField(rowsField.current);
   }, []);
 
@@ -1834,33 +1860,9 @@ export const Comparison = React.memo(() => {
 
   useEffect(() => setLoadingContent(false), [compared.length]);
 
-  useEffect(() => {
-    let replaces = [
-      {
-        className: "column-icon",
-        Header: () => <CustomTableHeader title={"Name"} />,
-        accessor: "coin_title",
-        Cell: row =>
-          row && (
-            <Fragment>
-              <div className="comptablehead">
-                <Img src={row.original.img_url} width="20px" height="20px" />
-                &nbsp;&nbsp;{row.value}
-              </div>
-            </Fragment>
-          ),
-        sortMethod: (a, b) => {
-          return a.localeCompare(b);
-        },
-        width: "15%"
-      }
-    ];
-    checkStateOfField.forEach(e => {
-      if (e.checked) {
-        replaces.push(...colLong.filter(c => c.accessor == e.field));
-      }
-    });
-    setDynaColumn(replaces);
+  useEffect(() => {    
+    const rep = [...originCol.current];
+    setDynaColumn(rep);
   }, [checkStateOfField]);
 
   const tableToken = useMemo(() => 
@@ -1879,7 +1881,7 @@ export const Comparison = React.memo(() => {
         onPageChange={page => onPageChange(page)}
     />
   , [allCoins, checkStateOfToken]);
-  
+
   return (
     <Content
       style={{
@@ -1898,7 +1900,7 @@ export const Comparison = React.memo(() => {
             background: "#fff",
             justifyContent: "space-around"
           }}
-        >{console.log('rerender-comparison')}
+        >
           <div className="row" style={{ paddingBottom: "10px" }}>
             <span data-tip data-for='comparison_title_tip' style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
             <ReactTooltip id='comparison_title_tip' type='warning' effect='solid'>
