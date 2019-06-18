@@ -5,8 +5,8 @@ import { Layout } from "antd";
 import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
-import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
+import Select from "react-select";
 import Img from "react-image";
 import "./Stable.css";
 
@@ -273,12 +273,9 @@ export const Stable = () => {
               className="col-sm-6 "
               style={{ textAlign: "left", width: "100%", padding: "0px" }}
             >
-              <span data-tip data-for='stable_title_tip' style={{ fontSize: "14pt" }}>
+              <span style={{ fontSize: "14pt" }}>
                 STABLECOINS({coins.length})
               </span>
-              <ReactTooltip id='stable_title_tip' type='warning' effect='solid'>
-                <span>Stable title</span>
-              </ReactTooltip>
             </div>
           </div>
 

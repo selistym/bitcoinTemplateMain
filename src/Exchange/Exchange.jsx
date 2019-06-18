@@ -2,10 +2,9 @@ import React, { useState, useEffect, Fragment} from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useAllCoins } from "../hooks";
+import { useExchanges } from "../hooks";
 // react-table
 import ReactTable from "react-table";
-import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
 import Img from "react-image";
 import "./Exchange.css";
@@ -26,13 +25,27 @@ const numberWith6decimals = x => {
   return x;
 };
 
+const numberWith4decimals = x => {
+  if (parseFloat(x).toFixed(4) != parseFloat(x)) {
+    return parseFloat(x).toFixed(4);
+  }
+  return x;
+};
+
+const numberWith2decimals = x => {
+  if (parseFloat(x).toFixed(2) != parseFloat(x)) {
+    return parseFloat(x).toFixed(2);
+  }
+  return x;
+};
+
 export const Exchange = () => {
   const currency_sign = ["$", "Ƀ", "Ξ"];
   const currency_letter = ["usd", "btc", "eth"];  
 
   const [coins, toCoins] = useState([]);
   const [currency, setCurrency] = useState("0");
-  const fetched = useAllCoins();
+  const fetched = useExchanges();
   
   useEffect(() => {
     toCoins(fetched);
@@ -45,129 +58,106 @@ export const Exchange = () => {
 
   const coinColumns = [
     {
-      Header: () => <CustomTableHeader title={"#"} />,
-      accessor: "mc_rank",
-      sortMethod: (a, b) => a - b,
-      width: "40"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Name"} />,
-      accessor: "coin_title",
+      Header: () => <CustomTableHeader title={"Exchange name"} />,
+      accessor: "lb_currency_name",
       Cell: row => (
         <Fragment>
           <div className="tablehead">
-          <Img src={row.original.img_url} width="20px" height="20px" />{" "}
-          {row.row.coin_title}
+            <Img src={row.row.img_url} width="20px" height="20px" />{" "}
+            {row.row.lb_currency_name}
           </div>
         </Fragment>
       ),
       width: "16%"
     },
     {
-      Header: () => <CustomTableHeader title={"Volume 24 Hr"} />,
-      accessor: "asset_price_" + currency_letter[currency],
-      Cell: row => {        
-        if (row.value) {          
-          if (row.value > 100) {
-            return (
-              <Fragment>
-                {" "}
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] + numberWithCommas(row.value)
-                    : numberWithCommas(row.value) + currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else if (row.value < 1) {            
-            if(row.value <= 0.000000001){
-              return (
-                <Fragment>
-                  <span className="textaligncenter">
-                    {currency == "0"
-                      ? currency_sign[currency] +
-                        (row.value).toPrecision(4)
-                      : (row.value).toPrecision(4) +
-                        currency_sign[currency]}
-                  </span>
-                </Fragment>
-              );
-            }
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(numberWith6decimals(row.value))
-                    : numberWithCommas(numberWith6decimals(row.value)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else {
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(row.value.toFixed(2))
-                    : numberWithCommas(row.value.toFixed(2)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          }
-        }
-        return <Fragment>$0</Fragment>;
-      },
+      Header: () => <CustomTableHeader title={"Avg daily transaction size (BTC)"} />,
+      accessor: "lb_avg_daily_tx_size",
+      Cell: row => (
+        <Fragment>
+          {row.row.lb_avg_daily_tx_size
+            ? numberWith4decimals(row.row.lb_avg_daily_tx_size)
+            : 0}
+        </Fragment>
+      ),
       sortMethod: (a, b) => a - b,
       width: "8%"
     },
     {
-      Header: () => (
-        <CustomTableHeader title={"Volume 24 Hr %"} />
-      ),
-      accessor: "supply_ratio",
+      Header: () => <CustomTableHeader title={"30 days transaction size (BTC)"} />,
+      accessor: "lb_avg_30d_tx_size",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(row.value.toFixed(2)) + "%" : 0}
+          {row.row.lb_avg_30d_tx_size
+            ? numberWith2decimals(row.row.lb_avg_30d_tx_size)
+            : 0}
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "13%"
+      width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Number of Pairs"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      Header: () => <CustomTableHeader title={"30 days transaction size change %"} />,
+      accessor: "lb_change_30d_tx_size",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.lb_premium
+              ? numberWithCommas(row.row.lb_premium.toFixed(2))
+              : 0}
+            %
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Decenterized"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      Header: () => <CustomTableHeader title={"Price avg weight (dependent on the size of the transaction the amount"} />,
+      accessor: "lb_weighted_avg_price",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            $
+            {row.row.lb_weighted_avg_price
+              ? numberWith2decimals(row.row.lb_weighted_avg_price)
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"KYC"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      Header: () => <CustomTableHeader title={"Premium"} />,
+      accessor: "lb_premium",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.lb_premium
+              ? numberWithCommas(row.row.lb_premium.toFixed(2))
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
+    },
+    {
+      Header: () => <CustomTableHeader title={"Volatility (last 30 days)"} />,
+      accessor: "lb_volatility_30_days",
+      Cell: row => (
+        <Fragment>
+          <span className="textaligncenter">
+            {currency == "0"
+              ? numberWith2decimals(row.row.lb_volatility_30_days || 0)
+              : numberWith2decimals(row.row.lb_volatility_30_days || 0) +
+                currency_sign[Number(currency)]}
+          </span>
+        </Fragment>
+      ),
+      sortMethod: (a, b) => a - b,
+      width: "8%"
     }
   ];
   
@@ -185,10 +175,7 @@ export const Exchange = () => {
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
               <div style={{textAlign:'left', width:'100%', marginBottom:'20px'}}>
-                <span data-tip data-for='exchange_title_tip' style={{fontSize:'14pt'}}>Top selected Exchanges by DTRA team({coins.length})</span>
-                <ReactTooltip id='exchange_title_tip' type='warning' effect='solid'>
-                  <span>Exchange title</span>
-                </ReactTooltip>
+                <span style={{fontSize:'14pt'}}>Top selected Exchanges by DTRA team({coins.length})</span>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
               </div>

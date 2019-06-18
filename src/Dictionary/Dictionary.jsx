@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from "react";
 // Layout
 import { Layout, Icon, Input } from "antd";
-// custom hook
-import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
-import ReactTooltip from 'react-tooltip';
 import "./Dictionary.css";
 
 const { Content } = Layout;
 
 export const Dictionary = React.memo(() => {
-  const [coins, toCoins] = useState([]);
-  const fetched = useAllCoins();
   const [filterText, setFilterText] = useState("");
 
-  useEffect(() => {
-    toCoins(fetched);
-  }, [fetched]);
 
   const datas = [
     {
@@ -338,10 +330,7 @@ export const Dictionary = React.memo(() => {
             className="col-sm-6 "
             style={{ textAlign: "left", width: "100%", padding: "0px" }}
           >
-            <span data-tip data-for='dictionary_title_tip' style={{ fontSize: "14pt" }}>DICTIONARY</span>
-            <ReactTooltip id='dictionary_title_tip' type='warning' effect='solid'>
-              <span>Dictionary title</span>
-            </ReactTooltip>
+            <span style={{ fontSize: "14pt" }}>DICTIONARY</span>
           </div>
           <div
             className="col-sm-6 "

@@ -13,19 +13,15 @@ const numberWithCommas = x => {
   return parts.join(".");
 };
 
-const innerMenu = () => {
-  console.log(localStorage);
-  const username = JSON.parse(localStorage.getItem("user")).email;
-  console.log(username,"a");
+const innerMenu = () => {  
+  const username = JSON.parse(localStorage.getItem("user")).email;  
   return (
     <Menu style={{  zIndex:'9999' }}>
-      {/* {!desktop && ( */}
-        <Menu.Item key="0">
-          <Link to="/" style={{ margin: 3}}>
-            {username}
-          </Link>
-        </Menu.Item>
-      {/* )} */}
+      <Menu.Item key="0">
+        <Link to="/" style={{ margin: 3}}>
+          {username}
+        </Link>
+      </Menu.Item>
       <Menu.Item key="1">
         <Link to="/login" style={{ margin: 3}}>
           Logout
@@ -35,7 +31,7 @@ const innerMenu = () => {
   );
 };
 
-export const CustomHeader = props => {
+export const CustomHeader = ({onHeaderSectionClick}) => {
   const headers = useHeaders();
   return (
     <Header
@@ -60,16 +56,21 @@ export const CustomHeader = props => {
       >
         <div className="row" style={{marginTop:'15px', fontSize:'9pt', fontWeight: "500", justifyContent: 'space-around', lineHeight: 1.5}}>
             <div className="col-sm-2 col-md-2 col-lg-2">
-              <span style={{color: '#A1A1A1'}}>Assets&nbsp;&nbsp;</span>
-              <span style={{ fontWeight: "700", color: 'white'}}>
+              <span style={{color: '#A1A1A1', cursor: 'pointer'}} onClick={() => onHeaderSectionClick('assets')}>Assets&nbsp;&nbsp;</span>
+              <span style={{ fontWeight: "700", color: 'white', cursor: 'pointer'}} onClick={() => onHeaderSectionClick('assets')}>
                 {" "}
                 {headers.dtra_active_assets}
               </span>
             </div>
-            <div className="col-sm-4 col-md-4 col-lg-4">
-              <span style={{color: '#A1A1A1'}}>
-                Marketcap  
+            <div className="col-sm-2 col-md-2 col-lg-2">
+              <span style={{color: '#A1A1A1', cursor: 'pointer'}} onClick={() => onHeaderSectionClick('exchanges')}>Exchanges&nbsp;&nbsp;</span>
+              <span style={{ fontWeight: '700', color: 'white', cursor: 'pointer'}} onClick={() => onHeaderSectionClick('exchanges')}>
+                {" "}
+                {headers.dtra_active_exchanges}
               </span>
+            </div>
+            <div className="col-sm-4 col-md-4 col-lg-4">
+              <span style={{color: '#A1A1A1'}}>Marketcap</span>
               <span style={{color: 'white'}}>
               &nbsp;&nbsp;${numberWithCommas(
                   parseFloat(headers.marketcap_dtra_active).toFixed(0)
@@ -84,7 +85,7 @@ export const CustomHeader = props => {
                 % 24h)
               </span>
             </div>
-            <div className="col-sm-6 col-md-6 col-lg-6">
+            <div className="col-sm-4 col-md-4 col-lg-4">
               <span style={{color: '#F4F4F4'}}> Dominance : </span>
               <span style={{color: '#A1A1A1' }}>&nbsp;&nbsp;&nbsp;&nbsp;BTC</span>
               <span style={{ color: "white" }}>

@@ -1902,10 +1902,8 @@ export const Comparison = React.memo(() => {
           }}
         >
           <div className="row" style={{ paddingBottom: "10px" }}>
-            <span data-tip data-for='comparison_title_tip' style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
-            <ReactTooltip id='comparison_title_tip' type='warning' effect='solid'>
-                <span>Comparison title</span>
-            </ReactTooltip>
+            <span  style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
+            
           </div>
           <div className="row">
             <span style={{ fontSize: "12pt" }}>
@@ -1933,7 +1931,7 @@ export const Comparison = React.memo(() => {
                 showPagination={false}
                 className="-striped -highlight"
                 SubComponent={row =>
-                  row.original.fields.map((e, k) => (
+                  row.original.fields.map((e, k) => (                      
                     <FieldChecker
                       key={k}
                       field={e.field}
@@ -1945,7 +1943,7 @@ export const Comparison = React.memo(() => {
                       }
                       label={e.label}
                       onChangeHandler={onChangeField}
-                    />
+                    />                    
                   ))
                 }
                 style={{ height: "440px" }}
@@ -1960,7 +1958,9 @@ export const Comparison = React.memo(() => {
             style={{
               marginTop: "20px",
               justifyContent: "center",
-              textAlign: "center"
+              textAlign: "center",
+              height: "500px",
+              overflowY: "scroll"
             }}
           >
             {" "}

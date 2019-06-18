@@ -26,6 +26,7 @@ function login(email, password) {
 
 function logout() {
     // remove user from local storage to log user out
+    console.log("a");
     localStorage.removeItem('user');
 }
 

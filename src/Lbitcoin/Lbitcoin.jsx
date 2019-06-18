@@ -2,10 +2,10 @@ import React, { useState, useEffect, Fragment } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useAllCoins } from "../hooks";
+import { useLocalCoins } from "../hooks";
+import { authHeader, dynamicSort } from "../_helpers";
 // react-table
 import ReactTable from "react-table";
-import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
 import Select from "react-select";
 import Img from "react-image";
@@ -28,6 +28,20 @@ const numberWith6decimals = x => {
   return x;
 };
 
+const numberWith4decimals = x => {
+  if (parseFloat(x).toFixed(4) != parseFloat(x)) {
+    return parseFloat(x).toFixed(4);
+  }
+  return x;
+};
+
+const numberWith2decimals = x => {
+  if (parseFloat(x).toFixed(2) != parseFloat(x)) {
+    return parseFloat(x).toFixed(2);
+  }
+  return x;
+};
+
 const options = [
   { value: "0", label: "USD" },
   { value: "1", label: "BTC" },
@@ -40,7 +54,7 @@ export const Lbitcoin = () => {
 
   const [coins, toCoins] = useState([]);
   const [currency, setCurrency] = useState("0");
-  const fetched = useAllCoins();
+  const fetched = useLocalCoins();
 
   useEffect(() => {
     toCoins(fetched);
@@ -53,37 +67,54 @@ export const Lbitcoin = () => {
 
   const coinColumns = [
     {
-      Header: () => <CustomTableHeader title={"#"} />,
-      accessor: "mc_rank",
-      sortMethod: (a, b) => a - b,
-      width: "40"
-    },
-    {
-      Header: () => <CustomTableHeader title={"Exchange Name"} />,
-      accessor: "coin_title",
+      Header: () => <CustomTableHeader title={"Exchange name"} />,
+      accessor: "lb_currency_name",
       Cell: row => (
         <Fragment>
           <div className="tablehead">
-            <Img src={row.original.img_url} width="20px" height="20px" />{" "}
-            {row.row.coin_title}
+            <Img src={row.row.img_url} width="20px" height="20px" />{" "}
+            {row.row.lb_currency_name}
           </div>
         </Fragment>
       ),
       width: "16%"
     },
     {
-      Header: () => (
-        <CustomTableHeader title={"Avg daily transaction size(BTC)"} />
-      ),
-      accessor: "market_cap_" + currency_letter[Number(currency)],
+      Header: () => <CustomTableHeader title={"Avg daily transaction size (BTC)"} />,
+      accessor: "lb_avg_daily_tx_size",
       Cell: row => (
         <Fragment>
-          <span className="textaligncenter">
-            {currency == "0"
-              ? currency_sign[Number(currency)] +
-                numberWithCommas(parseInt(row.value).toFixed(0) || 0)
-              : numberWithCommas(parseInt(row.value).toFixed(0) || 0) +
-                currency_sign[Number(currency)]}
+          {row.row.lb_avg_daily_tx_size
+            ? numberWith4decimals(row.row.lb_avg_daily_tx_size)
+            : 0}
+        </Fragment>
+      ),
+      sortMethod: (a, b) => a - b,
+      width: "8%"
+    },
+    {
+      Header: () => <CustomTableHeader title={"30 days transaction size (BTC)"} />,
+      accessor: "lb_avg_30d_tx_size",
+      Cell: row => (
+        <Fragment>
+          {row.row.lb_avg_30d_tx_size
+            ? numberWith2decimals(row.row.lb_avg_30d_tx_size)
+            : 0}
+        </Fragment>
+      ),
+      sortMethod: (a, b) => a - b,
+      width: "8%"
+    },
+    {
+      Header: () => <CustomTableHeader title={"30 days transaction size change %"} />,
+      accessor: "lb_change_30d_tx_size",
+      Cell: row => (
+        <Fragment>
+          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.lb_premium
+              ? numberWithCommas(row.row.lb_premium.toFixed(2))
+              : 0}
+            %
           </span>
         </Fragment>
       ),
@@ -91,122 +122,56 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => (
-        <CustomTableHeader title={"30 days transaction size(BTC)"} />
+      Header: () => <CustomTableHeader title={"Price avg weight (dependent on the size of the transaction the amount"} />,
+      accessor: "lb_weighted_avg_price",
+      Cell: row => (
+        <Fragment>
+          <span className="textaligncenter">
+            $
+            {row.row.lb_weighted_avg_price
+              ? numberWith2decimals(row.row.lb_weighted_avg_price)
+              : 0}
+          </span>
+        </Fragment>
       ),
-      accessor: "asset_price_" + currency_letter[currency],
-      Cell: row => {
-        if (row.value) {
-          if (row.value > 100) {
-            return (
-              <Fragment>
-                {" "}
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] + numberWithCommas(row.value)
-                    : numberWithCommas(row.value) + currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else if (row.value < 1) {
-            if (row.value <= 0.000000001) {
-              return (
-                <Fragment>
-                  <span className="textaligncenter">
-                    {currency == "0"
-                      ? currency_sign[currency] + row.value.toPrecision(4)
-                      : row.value.toPrecision(4) + currency_sign[currency]}
-                  </span>
-                </Fragment>
-              );
-            }
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(numberWith6decimals(row.value))
-                    : numberWithCommas(numberWith6decimals(row.value)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else {
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(row.value.toFixed(2))
-                    : numberWithCommas(row.value.toFixed(2)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          }
-        }
-        return <Fragment>$0</Fragment>;
-      },
       sortMethod: (a, b) => a - b,
       width: "8%"
     },
     {
-      Header: () => (
-        <CustomTableHeader title={"30 days transaction size change %"} />
-      ),
-      accessor: "supply_ratio",
-      Cell: row => (
-        <Fragment>
-          {row.value ? numberWithCommas(row.value.toFixed(2)) + "%" : 0}
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "13%"
-    },
-    {
-      Header: () => (
-        <CustomTableHeader
-          title={
-            "Price avg weight (dependent on the size of the transaction the amount"
-          }
-        />
-      ),
-      accessor: "min_max_position_" + currency_letter[currency],
-      Cell: row => (
-        <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
-        </Fragment>
-      ),
-      sortMethod: (a, b) => a - b,
-      width: "7%"
-    },
-    {
       Header: () => <CustomTableHeader title={"Premium"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "lb_premium",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.lb_premium
+              ? numberWithCommas(row.row.lb_premium.toFixed(2))
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Volatility (last 30 days)"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "lb_volatility_30_days",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {currency == "0"
+              ? numberWith2decimals(row.row.lb_volatility_30_days || 0)
+              : numberWith2decimals(row.row.lb_volatility_30_days || 0) +
+                currency_sign[Number(currency)]}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     }
   ];
   const changeCurrencyUnit = currency => {
     setCurrency(currency.value);
   };
-  
   return (
     <Content
       style={{
@@ -227,12 +192,9 @@ export const Lbitcoin = () => {
               className="col-sm-6 "
               style={{ textAlign: "left", width: "100%", padding: "0px" }}
             >
-              <span data-tip data-for='lbitcoin_title_tip' style={{ fontSize: "14pt" }}>
+              <span style={{ fontSize: "14pt" }}>
                 Localbitcoins transactions by country({coins.length})
               </span>
-              <ReactTooltip id='lbitcoin_title_tip' effect='solid'>
-                <span>Lbitcoin title</span>
-              </ReactTooltip>
             </div>
             <div
               className="col-sm-6 "
@@ -243,29 +205,31 @@ export const Lbitcoin = () => {
                 display: "flex"
               }}
             >
-              <Select
-                className="Selector"
-                value={currency.value}
-                isSearchable={false}
-                onChange={currency => changeCurrencyUnit(currency)}
-                options={options}
-                placeholder={"USD"}
-              />
+              
             </div>
           </div>
-          <div className="row"  style={{ width: "100%", display: "flex", padding: 0, margin: 0, paddingBottom: '10px' }}>
+          <div
+            className="row"
+            style={{
+              width: "100%",
+              display: "flex",
+              padding: 0,
+              margin: 0,
+              paddingBottom: "10px"
+            }}
+          >
             <span style={{ fontSize: "12pt" }}>
               The Following section is intended to describe the transactions
               retrieved in Localbitcoins to understand global usage of bitcoin.
             </span>
           </div>
           <ReactTable
-            data={coins}
+            data={coins.sort(dynamicSort("lb_avg_daily_tx_size"))}
             columns={coinColumns}
             showPagination={false}
             className="lbitcoinTable"
             loading={coins.length > 0 ? false : true}
-            rowKey={coin => coin.coin_id}
+            rowKey={coin => coin.lb_avg_daily_tx_size}
             defaultPageSize={coins.length}
           />
         </div>

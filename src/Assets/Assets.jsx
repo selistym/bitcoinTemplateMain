@@ -6,7 +6,6 @@ import { useAllCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
 import Select from "react-select";
-import ReactTooltip from 'react-tooltip';
 import Img from "react-image";
 
 import "./Assets.css";
@@ -265,11 +264,8 @@ export const Assets = () => {
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
               <div className="col-sm-6 " style={{textAlign:'left', width:'100%', padding:'0px'}}>
-                <span data-tip data-for='asset_title_tip' style={{fontSize:'14pt'}}>Top selected crypto-assets by DTRA team({coins.length})</span>
-                <ReactTooltip id='asset_title_tip' type='warning' effect='solid'>
-                  <span>Asset title</span>
-                </ReactTooltip>
-              </div>              
+                <span style={{fontSize:'14pt'}}>Top selected crypto-assets by DTRA team({coins.length})</span>
+              </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
                 {/* <Input
                   placeholder="Search..."

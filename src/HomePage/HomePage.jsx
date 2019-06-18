@@ -31,15 +31,18 @@ export const HomePage = () => {
       case 'stable':
             return <Stable />;
       case 'lbitcoin':
-          return <Lbitcoin />;      
+          return <Lbitcoin />;
     }
+  }
+  const onHeaderSectionClickHandler = section => {
+    setNav(section);
   }
   return(
     <div>
       <Layout>
         <Navigation navigationHandler={navigationHandler}/>
         <Layout>
-          <CustomHeader />
+          <CustomHeader onHeaderSectionClick={onHeaderSectionClickHandler}/>
           {conditionCmp(nav)}
         </Layout>
       </Layout>

@@ -24,6 +24,10 @@ export const ForgotPassword = () => {
 
 	loadReCaptcha();
 
+	 useEffect(() => {
+	 	localStorage.removeItem("user");
+	 },[]);
+
 	useEffect(() => {
 		if(!submitted) return;
 		toSubmit(false);

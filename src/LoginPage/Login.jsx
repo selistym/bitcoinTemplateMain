@@ -13,7 +13,8 @@ export const Login = () => {
 	const [success, setSuccess] = useState(false);
   	const [alertSet, activateAlert] = useState(false);
 
-	const handleEmail = (e) => {
+	
+    const handleEmail = (e) => {
 		setEmail(e.target.value);
 	};
 
@@ -25,6 +26,8 @@ export const Login = () => {
 		e.preventDefault();
 		toSubmit(true);
 	};
+
+
 
 	useEffect(() => {
 		if(!submitted) return;
@@ -67,13 +70,12 @@ export const Login = () => {
 							<form name="form" onSubmit={handleSubmit}>
 								<div className={'form-group' + (submitted && !email ? ' has-error' : '')}>
 									<input type="text" className="form-control" placeholder="Email" autoComplete="true" name="email" value={email} onChange={handleEmail}  style={{borderRadius:'1px'}}/>
-									
 									{ submitted && !email &&
 										<div className="help-block">Email is required</div>
 									}
 								</div>
 								<div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
-									<input type="password" className="form-control" placeholder="Password" autoComplete="true" name="password" value={password} onChange={handlePassword} style={{borderRadius:'1px'}}/>									
+									<input type="password" className="form-control" placeholder="Password" autoComplete="true" name="password" value={password} onChange={handlePassword} style={{borderRadius:'1px'}}/>
 									{ submitted && !password &&
 										<div className="help-block">Password is required</div>
 									}

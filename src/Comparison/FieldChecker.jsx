@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-
+import ReactTooltip from 'react-tooltip';
 export const FieldChecker = props => {
     const {field, init, label, onChangeHandler} = props;
     const checkRef = useRef();
@@ -18,6 +18,10 @@ export const FieldChecker = props => {
                 onChange={(e) => {onChange(e)}}
             />
             <span style={{paddingLeft: '5px'}}>{label}</span>
+            <span data-tip data-for='check_tip' style={{color:'blue', paddingLeft: '5px'}}>i</span>
+            <ReactTooltip id='check_tip' type='warning' effect='solid'>
+                <span>Information ToolTip</span>
+            </ReactTooltip>
         </div>
     );
 }
