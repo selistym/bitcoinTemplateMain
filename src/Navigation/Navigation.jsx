@@ -7,12 +7,12 @@ const desktop = window.innerWidth > 1000;
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-export const Navigation = React.memo(({ navigationHandler }) => {
-  const username = JSON.parse(localStorage.getItem("user")).email;
+export const Navigation = React.memo(({ navigationHandler, selectedMenu}) => {
+  
   const onSelectNav = item => {
     navigationHandler(item.key);
   };
-
+  
   return (
     <Sider
       style={{ minHeight: "100vh", background: "#252525" }}
@@ -26,7 +26,7 @@ export const Navigation = React.memo(({ navigationHandler }) => {
           marginBottom: 50,
           textAlign: "center"
         }}
-      >
+      >{console.log(selectedMenu, 'selected')}
         <Link to="/">
           <img src={logo} style={{ width: "90%" }} />
         </Link>
@@ -45,9 +45,10 @@ export const Navigation = React.memo(({ navigationHandler }) => {
         theme="dark"
         mode="inline"
         style={{ background: "#252525" }}
-        defaultSelectedKeys={["assets"]}
+        defaultSelectedKeys={[selectedMenu]}
+        selectedKeys={[selectedMenu]}
         defaultOpenKeys={["sub0"]}
-        onSelect={onSelectNav}        
+        onSelect={onSelectNav}
       >
         <SubMenu
           key="sub0"

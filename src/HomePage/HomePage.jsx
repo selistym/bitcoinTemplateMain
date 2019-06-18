@@ -40,7 +40,7 @@ export const HomePage = () => {
   return(
     <div>
       <Layout>
-        <Navigation navigationHandler={navigationHandler}/>
+        <Navigation navigationHandler={navigationHandler} selectedMenu={nav}/>
         <Layout>
           <CustomHeader onHeaderSectionClick={onHeaderSectionClickHandler}/>
           {conditionCmp(nav)}
