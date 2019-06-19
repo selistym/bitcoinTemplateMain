@@ -16,7 +16,7 @@ export const useExchanges = () => {
           console.log(data);
 		if(data.error) return;			
 	    const formatted = data.map(c => {
-	      const link = 'https://cryptocompare.com' + c.img_url;
+	      const link = 'https://cryptocompare.com' + c.exch_logo_url;
 	      delete c.img_url;
 	      return {
 	        ...c,

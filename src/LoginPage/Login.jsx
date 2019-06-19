@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import config from 'config';
 import { Link, Redirect } from 'react-router-dom';
-import { Alert } from 'antd';
+import { message } from 'antd';
 import back from './back.png';
 import logo from './logo_beta_6.svg';
 
@@ -11,9 +11,7 @@ export const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [success, setSuccess] = useState(false);
-  	const [alertSet, activateAlert] = useState(false);
 
-	
     const handleEmail = (e) => {
 		setEmail(e.target.value);
 	};
@@ -26,8 +24,6 @@ export const Login = () => {
 		e.preventDefault();
 		toSubmit(true);
 	};
-
-
 
 	useEffect(() => {
 		if(!submitted) return;
@@ -45,19 +41,15 @@ export const Login = () => {
 				localStorage.setItem('user', JSON.stringify(data));
 				setSuccess(true);
 			} else {
-        activateAlert(true);
-        setTimeout(() => {
-          activateAlert(false);
-        }, 1500);
-      }
+				message.warning("Wrong email and/or password!");
+      		}
 		});
 	}, [submitted]);
 
 	return (
 		<div className="custom" style={{ height: '100vh', width: '100vw', position: 'relative' }}>
 			<img src={back} style={{ height: '100%', width: '100%', position: 'absolute', zIndex: 1 }} />
-			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>
-				{ alertSet && <Alert style={{ position: 'fixed', right: 0, zIndex: 999, margin: '10px 15px' }} message="Wrong email and/or password!" type="warning" /> }
+			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>				
 				<div className="row" style={{textAlign:'center', marginTop: '10vh'}}>
 					<img src={logo} />				
 				</div>

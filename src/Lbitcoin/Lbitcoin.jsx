@@ -42,6 +42,14 @@ const numberWith2decimals = x => {
   return x;
 };
 
+const removeSymbol = x => {
+  var strRet=x;
+  var idx=strRet.indexOf("(");
+  if(idx>0)
+    strRet=strRet.substring(0,idx-1);
+  return strRet;
+};
+
 const options = [
   { value: "0", label: "USD" },
   { value: "1", label: "BTC" },
@@ -67,20 +75,20 @@ export const Lbitcoin = () => {
 
   const coinColumns = [
     {
-      Header: () => <CustomTableHeader title={"Exchange name"} />,
+      Header: () => <CustomTableHeader title={"Currency name"} />,
       accessor: "lb_currency_name",
       Cell: row => (
         <Fragment>
           <div className="tablehead">
             <Img src={row.row.img_url} width="20px" height="20px" />{" "}
-            {row.row.lb_currency_name}
+            {removeSymbol(row.row.lb_currency_name)}
           </div>
         </Fragment>
       ),
       width: "16%"
     },
     {
-      Header: () => <CustomTableHeader title={"Avg daily transaction size (BTC)"} />,
+      Header: () => <CustomTableHeader title={"Avg daily transaction size (฿)"} />,
       accessor: "lb_avg_daily_tx_size",
       Cell: row => (
         <Fragment>
@@ -93,7 +101,7 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"30 days transaction size (BTC)"} />,
+      Header: () => <CustomTableHeader title={"30 days transaction size (฿)"} />,
       accessor: "lb_avg_30d_tx_size",
       Cell: row => (
         <Fragment>
@@ -129,7 +137,7 @@ export const Lbitcoin = () => {
           <span className="textaligncenter">
             $
             {row.row.lb_weighted_avg_price
-              ? numberWith2decimals(row.row.lb_weighted_avg_price)
+              ? numberWithCommas(parseInt(row.row.lb_weighted_avg_price))
               : 0}
           </span>
         </Fragment>
@@ -145,7 +153,7 @@ export const Lbitcoin = () => {
           <span style={{ color: row.value >= 0 ? "green" : "red" }}>
             {row.row.lb_premium
               ? numberWithCommas(row.row.lb_premium.toFixed(2))
-              : 0}
+              : 0}%
           </span>
         </Fragment>
       ),

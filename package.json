@@ -18,6 +18,7 @@
         "react-accessible-accordion": "^3.0.0",
         "react-addons-css-transition-group": "^15.6.0",
         "react-addons-shallow-compare": "^15.6.0",
+        "react-country-flag": "^1.0.2",
         "react-dom": "^16.8.6",
         "react-dom-factories": "^1.0.0",
         "react-favicon": "0.0.16",

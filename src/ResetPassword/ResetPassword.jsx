@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import config from 'config';
 import { Link, Redirect } from 'react-router-dom';
-import { Icon, Alert } from 'antd';
+import { Icon, message } from 'antd';
 import back from './back.png';
 
 export const ResetPassword = (props) => {
@@ -10,7 +10,7 @@ export const ResetPassword = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [success, setSuccess] = useState(false);
-	const [alertSet, activateAlert] = useState(false);
+	
 	const recvToken = new URLSearchParams(props.location.search).get('token');
 
 	const handlePassword = (e) => {
@@ -38,19 +38,15 @@ export const ResetPassword = (props) => {
 				data.email = email;				
 				setSuccess(true);
 			} else {
-				activateAlert(true);
-				setTimeout(() => {
-				activateAlert(false);
-			}, 1500);
-      }
+				message.warning("Wrong email and/or password!");
+			}
 		});
 	}, [submitted]);
 
 	return (
 		<div className="custom" style={{ height: '100vh', width: '100vw', position: 'relative' }}>
 			<img src={back} style={{ height: '100%', width: '100%', position: 'absolute', zIndex: 1 }} />
-			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>
-        		{ alertSet && <Alert style={{ position: 'fixed', right: 0, zIndex: 999, margin: '10px 15px' }} message="Wrong email and/or password!" type="warning" /> }
+			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>        		
 				<div className="row">
 					<div className="col-sm-4 col-xs-1"></div>
 					<div className="col-sm-4 col-xs-10" style={{ padding: '50px 30px', background: 'white', borderRadius: '3px', marginTop: '25vh' }}>

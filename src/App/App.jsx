@@ -5,6 +5,7 @@ import { Login } from '../LoginPage';
 import { PrivateRoute } from './PrivateRoute';
 import { ResetPassword } from '../ResetPassword';
 import { ForgotPassword } from '../ForgotPassword';
+import { Signup } from '../Signup';
 import favicon from './fav.png';
 
 const changeFavicon = src => {  
@@ -20,16 +21,19 @@ const changeFavicon = src => {
   document.head.appendChild(link);
 }
 export const App = () => {  
-  const recvToken = new URLSearchParams(location.search).get('token');
+  const recvToken = new URLSearchParams(location.search).get('token')
+  const isRegistration = new URL(location.href).pathname.includes('/registration');
+  console.log(isRegistration, 'regist')
   changeFavicon(favicon);
 
   return (
     <Router>
       <div>
-        <PrivateRoute p="/" c={HomePage} token={recvToken}/>        
+        <PrivateRoute p="/" c={HomePage} token={recvToken} type={isRegistration}/>        
         <Route path="/login" component={Login} />
 	      <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/forgot_password" component={ResetPassword} />
+        <Route path="/registration" component={Signup} />
       </div>
     </Router>
   );

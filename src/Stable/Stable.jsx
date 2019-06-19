@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useAllCoins } from "../hooks";
+import { useStableCoins } from "../hooks";
 // react-table
 import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
@@ -18,7 +18,19 @@ const numberWithCommas = x => {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
 };
+const numberWith4decimals = x => {
+  if (parseFloat(x).toFixed(4) != parseFloat(x)) {
+    return parseFloat(x).toFixed(4);
+  }
+  return x;
+};
 
+const numberWith2decimals = x => {
+  if (parseFloat(x).toFixed(2) != parseFloat(x)) {
+    return parseFloat(x).toFixed(2);
+  }
+  return x;
+};
 const numberWith6decimals = x => {
   if (parseFloat(x).toFixed(6) != parseFloat(x)) {
     return parseFloat(x).toFixed(6);
@@ -38,7 +50,7 @@ export const Stable = () => {
 
   const [coins, toCoins] = useState([]);
   const [currency, setCurrency] = useState("0");
-  const fetched = useAllCoins();
+  const fetched = useStableCoins();
 
   useEffect(() => {
     toCoins(fetched);
@@ -50,36 +62,29 @@ export const Stable = () => {
   });
 
   const coinColumns = [
-    {
-      Header: () => <CustomTableHeader title={"#"} />,
-      accessor: "mc_rank",
-      sortMethod: (a, b) => a - b,
-      width: "40"
-    },
+    
     {
       Header: () => <CustomTableHeader title={"Name"} />,
-      accessor: "coin_title",
+      accessor: "stc_tcoin_title",
       Cell: row => (
         <Fragment>
           <div className="tablehead">
             <Img src={row.original.img_url} width="20px" height="20px" />{" "}
-            {row.row.coin_title}
+            {row.row.stc_tcoin_title}
           </div>
         </Fragment>
       ),
-      width: "16%"
+      width: "200"
     },
     {
       Header: () => <CustomTableHeader title={"Marketcap"} />,
-      accessor: "market_cap_" + currency_letter[Number(currency)],
+      accessor: "stc_marketcap_usd",
       Cell: row => (
         <Fragment>
           <span className="textaligncenter">
-            {currency == "0"
-              ? currency_sign[Number(currency)] +
-                numberWithCommas(parseInt(row.value).toFixed(0) || 0)
-              : numberWithCommas(parseInt(row.value).toFixed(0) || 0) +
-                currency_sign[Number(currency)]}
+            ${row.row.stc_marketcap_usd
+              ? numberWithCommas(row.row.stc_marketcap_usd.toFixed(0))
+              : 0}
           </span>
         </Fragment>
       ),
@@ -88,165 +93,152 @@ export const Stable = () => {
     },
     {
       Header: () => <CustomTableHeader title={"Price"} />,
-      accessor: "asset_price_" + currency_letter[currency],
-      Cell: row => {
-        if (row.value) {
-          if (row.value > 100) {
-            return (
-              <Fragment>
-                {" "}
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] + numberWithCommas(row.value)
-                    : numberWithCommas(row.value) + currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else if (row.value < 1) {
-            if (row.value <= 0.000000001) {
-              return (
-                <Fragment>
-                  <span className="textaligncenter">
-                    {currency == "0"
-                      ? currency_sign[currency] + row.value.toPrecision(4)
-                      : row.value.toPrecision(4) + currency_sign[currency]}
-                  </span>
-                </Fragment>
-              );
-            }
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(numberWith6decimals(row.value))
-                    : numberWithCommas(numberWith6decimals(row.value)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          } else {
-            return (
-              <Fragment>
-                <span className="textaligncenter">
-                  {currency == "0"
-                    ? currency_sign[currency] +
-                      numberWithCommas(row.value.toFixed(2))
-                    : numberWithCommas(row.value.toFixed(2)) +
-                      currency_sign[currency]}
-                </span>
-              </Fragment>
-            );
-          }
-        }
-        return <Fragment>$0</Fragment>;
-      },
+      accessor: "stc_current_usd",
+      Cell: row => (
+        <Fragment>
+          <span className="textaligncenter">
+            ${row.row.stc_current_usd
+              ? numberWith2decimals(row.row.stc_current_usd)
+              : 0}
+          </span>
+        </Fragment>
+      ),
       sortMethod: (a, b) => a - b,
       width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Use Case"} />,
-      accessor: "supply_ratio",
+      accessor: "stc_use_case",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(row.value.toFixed(2)) + "%" : 0}
+          <span className="textaligncenter">
+            {row.row.stc_use_case}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "13%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Collateral"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_collateral",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_collateral}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Platform/Blockchain"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_platform",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_platform}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Launch Year"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_launch_year",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_launch_year
+              ? numberWith2decimals(row.row.stc_launch_year)
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Volume 24 Hr/%"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_day_volume_change_usd",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+           <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.stc_day_volume_change_usd
+              ? numberWith2decimals(row.row.stc_day_volume_change_usd)
+              : 0}
+            %
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Volume 30D/%"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_30_day_volume_change_usd",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+           <span style={{ color: row.value >= 0 ? "green" : "red" }}>
+            {row.row.stc_30_day_volume_change_usd
+              ? numberWith2decimals(row.row.stc_30_day_volume_change_usd)
+              : 0}
+            %
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Volatility (30D)"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_volatility_30_usd",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_volatility_30_usd
+              ? numberWith2decimals(row.row.stc_volatility_30_usd)
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Number of Pairs"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_num_of_pairs",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_num_of_pairs
+              ? numberWithCommas(row.row.stc_num_of_pairs)
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     },
     {
       Header: () => <CustomTableHeader title={"Traded Exchanges"} />,
-      accessor: "min_max_position_" + currency_letter[currency],
+      accessor: "stc_traded_exchanges",
       Cell: row => (
         <Fragment>
-          {row.value ? numberWithCommas(numberWith6decimals(row.value)) : 0}
+          <span className="textaligncenter">
+            {row.row.stc_traded_exchanges
+              ? numberWithCommas(row.row.stc_traded_exchanges)
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
-      width: "7%"
+      width: "8%"
     }
   ];
-  const changeCurrencyUnit = currency => {
-    setCurrency(currency.value);
-  };
+ 
   return (
     <Content
       style={{
