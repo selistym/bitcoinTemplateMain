@@ -3,7 +3,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import { Layout } from "antd";
 // custom hook
 import { useLocalCoins } from "../hooks";
-import { authHeader, dynamicSort } from "../_helpers";
+import { authHeader, dynamicSort, numbericSort } from "../_helpers";
 // react-table
 import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
@@ -75,12 +75,12 @@ export const Lbitcoin = () => {
 
   const coinColumns = [
     {
-      Header: () => <CustomTableHeader title={"Currency name"} />,
+      Header: () => <CustomTableHeader title={"Name"} />,
       accessor: "lb_currency_name",
       Cell: row => (
         <Fragment>
           <div className="tablehead">
-            <Img src={row.row.img_url} width="20px" height="20px" />{" "}
+            <Img src={row.original.img_url} width="20px" height="20px" />{" "}
             {removeSymbol(row.row.lb_currency_name)}
           </div>
         </Fragment>
@@ -88,12 +88,12 @@ export const Lbitcoin = () => {
       width: "16%"
     },
     {
-      Header: () => <CustomTableHeader title={"Avg daily transaction size (฿)"} />,
+      Header: () => <CustomTableHeader title={"Tx (24h avg)"} />,
       accessor: "lb_avg_daily_tx_size",
       Cell: row => (
         <Fragment>
-          {row.row.lb_avg_daily_tx_size
-            ? numberWith4decimals(row.row.lb_avg_daily_tx_size)
+          ${row.row.lb_avg_daily_tx_size
+            ? numberWithCommas(parseInt(row.row.lb_avg_daily_tx_size))
             : 0}
         </Fragment>
       ),
@@ -101,12 +101,12 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"30 days transaction size (฿)"} />,
+      Header: () => <CustomTableHeader title={"Tx (30d avg)"} />,
       accessor: "lb_avg_30d_tx_size",
       Cell: row => (
         <Fragment>
-          {row.row.lb_avg_30d_tx_size
-            ? numberWith2decimals(row.row.lb_avg_30d_tx_size)
+          ${row.row.lb_avg_30d_tx_size
+            ? numberWithCommas(parseInt(row.row.lb_avg_30d_tx_size))
             : 0}
         </Fragment>
       ),
@@ -114,13 +114,26 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"30 days transaction size change %"} />,
+      Header: () => <CustomTableHeader title={"Volume (30d)"} />,
+      accessor: "lb_tot_30d_tx_size",
+      Cell: row => (
+         <Fragment>
+          ${row.row.lb_tot_30d_tx_size
+            ? numberWithCommas(parseInt(row.row.lb_tot_30d_tx_size))
+            : 0}
+        </Fragment>
+      ),
+      sortMethod: (a, b) => a - b,
+      width: "8%"
+    },
+    {
+      Header: () => <CustomTableHeader title={"Volume change (30d)"} />,
       accessor: "lb_change_30d_tx_size",
       Cell: row => (
         <Fragment>
           <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-            {row.row.lb_premium
-              ? numberWithCommas(row.row.lb_premium.toFixed(2))
+            {row.row.lb_change_30d_tx_size
+              ? numberWithCommas(numberWith2decimals(row.row.lb_change_30d_tx_size))
               : 0}
             %
           </span>
@@ -130,7 +143,7 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Price avg weight (dependent on the size of the transaction the amount"} />,
+      Header: () => <CustomTableHeader title={"Price (weighted avg)"} />,
       accessor: "lb_weighted_avg_price",
       Cell: row => (
         <Fragment>
@@ -146,7 +159,7 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Premium"} />,
+      Header: () => <CustomTableHeader title={"Premium / Discount"} />,
       accessor: "lb_premium",
       Cell: row => (
         <Fragment>
@@ -161,7 +174,7 @@ export const Lbitcoin = () => {
       width: "8%"
     },
     {
-      Header: () => <CustomTableHeader title={"Volatility (last 30 days)"} />,
+      Header: () => <CustomTableHeader title={"Volatility (30d)"} />,
       accessor: "lb_volatility_30_days",
       Cell: row => (
         <Fragment>
@@ -201,7 +214,7 @@ export const Lbitcoin = () => {
               style={{ textAlign: "left", width: "100%", padding: "0px" }}
             >
               <span style={{ fontSize: "14pt" }}>
-                Localbitcoins transactions by country({coins.length})
+                Localbitcoins transactions by country
               </span>
             </div>
             <div
@@ -226,18 +239,18 @@ export const Lbitcoin = () => {
               paddingBottom: "10px"
             }}
           >
-            <span style={{ fontSize: "12pt" }}>
+            {/* <span style={{ fontSize: "12pt" }}>
               The Following section is intended to describe the transactions
               retrieved in Localbitcoins to understand global usage of bitcoin.
-            </span>
+            </span> */}
           </div>
           <ReactTable
-            data={coins.sort(dynamicSort("lb_avg_daily_tx_size"))}
+            data={coins.sort(numbericSort("lb_tot_30d_tx_size"))}
             columns={coinColumns}
             showPagination={false}
             className="lbitcoinTable"
             loading={coins.length > 0 ? false : true}
-            rowKey={coin => coin.lb_avg_daily_tx_size}
+            rowKey={coin => coin.lb_tot_30d_tx_size}
             defaultPageSize={coins.length}
           />
         </div>

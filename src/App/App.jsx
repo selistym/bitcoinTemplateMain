@@ -7,7 +7,7 @@ import { ResetPassword } from '../ResetPassword';
 import { ForgotPassword } from '../ForgotPassword';
 import { Signup } from '../Signup';
 import favicon from './fav.png';
-
+  
 const changeFavicon = src => {  
   let link = document.createElement('link'),
       oldLink = document.getElementById('dynamic-favicon');

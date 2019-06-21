@@ -1906,12 +1906,12 @@ export const Comparison = React.memo(() => {
             
           </div>
           <div className="row">
-            <span style={{ fontSize: "12pt" }}>
+            {/* <span style={{ fontSize: "12pt" }}>
               The Following section is intended to allow you to compare
               different assets. You may choose the assets and metrics/parameters
               of your interest to see how one asset is located next to the
               other.
-            </span>
+            </span> */}
           </div>          
           <div className="row" style={{ padding: "20px 0px 0px 0px" }}>          
             <div

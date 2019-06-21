@@ -8,6 +8,7 @@ import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
 import Img from "react-image";
 import "./Exchange.css";
+import { numbericSort } from "../_helpers";
 
 const loading = require("../_helpers/loading.gif");
 const { Content } = Layout;
@@ -70,14 +71,32 @@ export const Exchange = () => {
       ),
       width: "150"
     },
+
+    {
+      Header: () => <CustomTableHeader title={"Country"} />,
+      accessor: "exch_country",
+      Cell: row => (
+        <Fragment>
+          <span className="textaligncenter">{row.row.exch_country}</span>
+        </Fragment>
+      ),
+      sortMethod: (a, b) => a - b,
+      width: "8%"
+    },
     {
       Header: () => <CustomTableHeader title={"Volume 24 Hr"} />,
       accessor: "exch_day_volume_usd",
       Cell: row => (
         <Fragment>
-          {row.row.exch_day_volume_usd
-            ? numberWith2decimals(row.row.exch_day_volume_usd)
-            : 0}
+         <span
+            style={{
+              color: "blue"
+            }}
+          >
+             ${row.row.exch_day_volume_usd
+              ? numberWithCommas(parseInt(row.row.exch_day_volume_usd))
+              : 0}
+          </span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
@@ -88,9 +107,13 @@ export const Exchange = () => {
       accessor: "exch_day_volume_change_usd",
       Cell: row => (
         <Fragment>
-          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-            {row.row.exch_day_volume_change_usd
-              ? numberWithCommas(row.row.exch_day_volume_change_usd)
+          <span
+            style={{
+              color: row.row.exch_day_volume_change_usd >= 0 ? "green" : "red"
+            }}
+          >
+            {row.row.exch_day_volume_change_usd != 0
+              ? numberWith2decimals(row.row.exch_day_volume_change_usd)
               : 0}
             %
           </span>
@@ -119,11 +142,7 @@ export const Exchange = () => {
       accessor: "exch_is_decenterilzed",
       Cell: row => (
         <Fragment>
-          <span
-         
-          >
-            {row.row.exch_is_decenterilzed ? "true" : "false"}
-          </span>
+          <span>{row.row.exch_is_decenterilzed ? "true" : "false"}</span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
@@ -134,11 +153,7 @@ export const Exchange = () => {
       accessor: "exch_kyc",
       Cell: row => (
         <Fragment>
-           <span
-          
-          >
-            {row.row.exch_kyc ? "true" : "false"}
-          </span>
+          <span>{row.row.exch_kyc ? "true" : "false"}</span>
         </Fragment>
       ),
       sortMethod: (a, b) => a - b,
@@ -166,7 +181,7 @@ export const Exchange = () => {
               style={{ textAlign: "left", width: "100%", marginBottom: "20px" }}
             >
               <span style={{ fontSize: "14pt" }}>
-                Top selected Exchanges by DTRA team({coins.length})
+                Top selected Exchanges by DTRA team
               </span>
             </div>
             <div
@@ -180,7 +195,7 @@ export const Exchange = () => {
             />
           </div>
           <ReactTable
-            data={coins}
+            data={coins.sort(numbericSort("exch_day_volume_usd"))}
             columns={coinColumns}
             showPagination={false}
             className="exchangeTable"

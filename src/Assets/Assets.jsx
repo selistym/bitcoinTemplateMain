@@ -264,7 +264,7 @@ export const Assets = () => {
           <div>
             <div className="row" style={{width:'100%', display: 'flex', padding: 0, margin: 0}}>
               <div className="col-sm-6 " style={{textAlign:'left', width:'100%', padding:'0px'}}>
-                <span style={{fontSize:'14pt'}}>Top selected crypto-assets by DTRA team({coins.length})</span>
+                <span style={{fontSize:'14pt'}}>Top selected crypto-assets by DTRA team</span>
               </div>
               <div className="col-sm-6 " style={{justifyContent:'flex-end', padding: 0, width:'100%', display:'flex'}}>
                 {/* <Input

@@ -266,6 +266,55 @@ export const Dictionary = React.memo(() => {
       definition:
         "Current token issuance out of all the tokens that will be generated(minted)",
       key: "38"
+    },
+    {
+      prefix: "A",
+      name: "Tx (24h avg)",
+      definition:
+        "The average size of transactions made in Localbitcoins for a specific FIAT currency,at the last traded day. Transaction size is converted to USD)",
+          key: "39"
+    },
+    {
+      prefix: "A",
+      name: "Tx (30d avg)",
+      definition:
+        "The average size of transactions made in Localbitcoins for a specific FIAT currency,at the last 30 days. Transaction size is converted to USD",
+      key: "40"
+    },
+    {
+      prefix: "V",
+      name: "Volume (30d) - Localbitcoins",
+      definition:
+        "The total size of transactions made in localbitcoins for a specific FIAT currency,at the last 30 days. Transaction size is converted to USD",
+      key: "41"
+    },
+    {
+      prefix: "V",
+      name: "Volume change (30d) - Localbitcoins",
+      definition:
+        "The change in total volume(%) of localbitcoinss transactions for a specific FIAT currency, of the last 30 days compared to 30 days prior.",
+      key: "42"
+    },
+    {
+      prefix: "P",
+      name: "Price (weighted avg)",
+      definition:
+        "The weighted average price of last 10 transactions made in localbitcoins for a specific FIAT currency in the last 72 hours, weights are transaction volume",
+      key: "43"
+    },
+    {
+      prefix: "P",
+      name: "Premium / Discount",
+      definition:
+        "Premium and discount represent the ratio of weighted average price compared to current bitcoin spot price",
+      key: "44"
+    },
+    {
+      prefix: "V",
+      name: "Volatility (last 30 days) - Localbitcoins",
+      definition:
+        "Current token issuance out of all the tokens that will be generated(minted)",
+      key: "45"
     }
   ];
 

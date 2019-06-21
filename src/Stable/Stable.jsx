@@ -9,6 +9,7 @@ import { CustomTableHeader } from "../CustomTableHeader";
 import Select from "react-select";
 import Img from "react-image";
 import "./Stable.css";
+import { dynamicSort, numbericSort } from "../_helpers";
 
 const loading = require("../_helpers/loading.gif");
 const { Content } = Layout;
@@ -74,7 +75,7 @@ export const Stable = () => {
           </div>
         </Fragment>
       ),
-      width: "200"
+      width: "150"
     },
     {
       Header: () => <CustomTableHeader title={"Marketcap"} />,
@@ -266,13 +267,13 @@ export const Stable = () => {
               style={{ textAlign: "left", width: "100%", padding: "0px" }}
             >
               <span style={{ fontSize: "14pt" }}>
-                STABLECOINS({coins.length})
+                STABLECOINS
               </span>
             </div>
           </div>
 
           <ReactTable
-            data={coins}
+            data={coins.sort(numbericSort("stc_marketcap_usd"))}
             columns={coinColumns}
             showPagination={false}
             className="stableTable"

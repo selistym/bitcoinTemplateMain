@@ -16,7 +16,7 @@ export const useLocalCoins = () => {
           console.log(data);
 		if(data.error) return;			
 	    const formatted = data.map(c => {
-	      const link = 'https://cryptocompare.com' + c.img_url;
+	      const link = c.lb_img_url;
 	      delete c.img_url;
 	      return {
 	        ...c,
