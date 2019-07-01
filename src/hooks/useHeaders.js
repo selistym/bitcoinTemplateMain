@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import config from 'config';
-import { authHeader } from '../_helpers';
+import { authHeader, authRefresh } from '../_helpers';
 
 export const useHeaders = () => {
 	const [headers, setHeaders] = useState([]);
 
 	useEffect(() => {
-		fetch(`${config.apiUrl}/get_header`, {
+    const uri = `${config.apiUrl}/get_header`;
+    const options = {
 	    method: 'GET',
 	    headers: authHeader()
-	  }).then(response => {
+	  };
+		fetch(uri, options).then(response => {
 	  	if(response.ok) return response.json();
-	  	else return JSON.stringify({ error: '500' });
+	  	else authRefresh({ uri: uri, opts: options });
 	  }).then(data => {
-		if(data.error) return;			
+		if(data.error) return;
 	    setHeaders(data);
 	  });
 	}, []);

@@ -9,7 +9,7 @@ import { CustomHeader } from '../Header';
 import { useListCoins } from '../hooks';
 const loading = require('../_helpers/loading.gif');
 // helpers
-import { authHeader, dynamicSort } from '../_helpers';
+import { authHeader, authRefresh, dynamicSort } from '../_helpers';
 const { Content } = Layout;
 
 export const Weight = (props) => {
@@ -48,7 +48,8 @@ export const Weight = (props) => {
     if(selected.length <= 1) return;
     setSleep(setTimeout(() => {
       const cs = selected.map(row => row.coin_id);
-      fetch(`${config.apiUrl}/weight`, {
+      const uri = `${config.apiUrl}/weight`;
+      const options = {
         method: 'POST',
         headers: authHeader(),
         body: JSON.stringify({
@@ -61,7 +62,11 @@ export const Weight = (props) => {
           distance_atl: atl,
           assets: cs.map(c => Number.parseInt(c))
         })
-      }).then(response => response.json()).then(data => {
+      };
+      fetch(uri, options).then(response => {
+        if(response.ok) return response.json();
+        return authRefresh({ uri: uri, opts: options });
+      }).then(data => {
         console.log(data);
         toCompare(data);
       });

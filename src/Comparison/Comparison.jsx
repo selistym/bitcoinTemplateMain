@@ -6,7 +6,7 @@ import { useListCoins } from "../hooks";
 
 import Img from "react-image";
 // helpers
-import { authHeader, dynamicSort } from "../_helpers";
+import { authHeader, authRefresh, dynamicSort } from "../_helpers";
 import ReactTable from "react-table";
 import ReactTooltip from 'react-tooltip';
 import { CustomTableHeader } from "../CustomTableHeader";
@@ -1809,7 +1809,7 @@ export const Comparison = React.memo(() => {
           originCol.current.push({...e});
         }
       }
-    });    
+    });
     setCheckStateOfField(rowsField.current);
   }, []);
 
@@ -1826,7 +1826,7 @@ export const Comparison = React.memo(() => {
         checked: checked
       });
     });
-    setCheckStateOfToken(rep_checks);    
+    setCheckStateOfToken(rep_checks);
   }, [fetchedAll, fetchedDefault]);
 
   useEffect(() => {
@@ -1837,12 +1837,17 @@ export const Comparison = React.memo(() => {
         const formatted = checkStateOfToken
           .filter(s => s.checked)
           .map(e => e.coin_id);
-        fetch(`${config.apiUrl}/get_assets_params`, {
+        const uri = `${config.apiUrl}/get_assets_params`;
+        const options = {
           method: "POST",
           headers: authHeader(),
           body: JSON.stringify({ assets: formatted })
-        })
-          .then(response => response.json())
+        };
+        fetch(uri, options)
+          .then(response => {
+            if(response.ok) return response.json();
+            return authRefresh({ uri: uri, opts: options });
+          })
           .then(data => {
             data.map(val => {
               val.img_url = "https://cryptocompare.com" + val.img_url;
@@ -1860,12 +1865,12 @@ export const Comparison = React.memo(() => {
 
   useEffect(() => setLoadingContent(false), [compared.length]);
 
-  useEffect(() => {    
+  useEffect(() => {
     const rep = [...originCol.current];
     setDynaColumn(rep);
   }, [checkStateOfField]);
 
-  const tableToken = useMemo(() => 
+  const tableToken = useMemo(() =>
     <ReactTable
         data={allCoins.sort(dynamicSort("full_name"))}
         columns={colToken}
@@ -1903,7 +1908,7 @@ export const Comparison = React.memo(() => {
         >
           <div className="row" style={{ paddingBottom: "10px" }}>
             <span  style={{ fontSize: "14pt" }}>COMPARISON TOOL</span>
-            
+
           </div>
           <div className="row">
             {/* <span style={{ fontSize: "12pt" }}>
@@ -1912,8 +1917,8 @@ export const Comparison = React.memo(() => {
               of your interest to see how one asset is located next to the
               other.
             </span> */}
-          </div>          
-          <div className="row" style={{ padding: "20px 0px 0px 0px" }}>          
+          </div>
+          <div className="row" style={{ padding: "20px 0px 0px 0px" }}>
             <div
               className="col-md-6 col-lg-6"
               style={{ marginBottom: "30px", padding: "0px 20px 0px 0px" }}
@@ -1931,7 +1936,7 @@ export const Comparison = React.memo(() => {
                 showPagination={false}
                 className="-striped -highlight"
                 SubComponent={row =>
-                  row.original.fields.map((e, k) => (                      
+                  row.original.fields.map((e, k) => (
                     <FieldChecker
                       key={k}
                       field={e.field}
@@ -1943,7 +1948,7 @@ export const Comparison = React.memo(() => {
                       }
                       label={e.label}
                       onChangeHandler={onChangeField}
-                    />                    
+                    />
                   ))
                 }
                 style={{ height: "440px" }}

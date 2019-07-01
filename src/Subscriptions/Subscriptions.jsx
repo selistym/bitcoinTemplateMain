@@ -5,7 +5,7 @@ import { Navigation } from '../Navigation';
 import { CustomHeader } from '../Header';
 // helpers
 import config from 'config';
-import { authHeader, dynamicSort } from '../_helpers';
+import { authHeader, authRefresh, dynamicSort } from '../_helpers';
 
 const { Content } = Layout;
 
@@ -23,10 +23,15 @@ export const Subscriptions = (props) => {
   });
 
   useEffect(() => {
-    fetch(`${config.apiUrl}/get_subs/${subscriptions.username}`, {
+    const uri = `${config.apiUrl}/get_subs/${subscriptions.username}`;
+    const options = {
       method: 'GET',
       headers: authHeader()
-    }).then(response => response.json()).then(data => {
+    };
+    fetch(uri, options).then(response => {
+      if(response.ok) return response.json();
+      return authRefresh({ uri: uri, opts: options });
+    }).then(data => {
       if(typeof data[0] !== 'undefined') setSubscriptions(data[0]);
     });
   }, []);
@@ -85,7 +90,8 @@ export const Subscriptions = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(toCheckPhone === 'error') return;
-    fetch(`${config.apiUrl}/save_subs`, {
+    const uri = `${config.apiUrl}/save_subs`;
+    const options = {
       method: 'POST',
       headers: authHeader(),
       body: JSON.stringify({
@@ -95,7 +101,11 @@ export const Subscriptions = (props) => {
         subs_daily_report_signal: subscriptions.subs_daily_report_signal ? checkPhone() : false,
         mobile_number: subscriptions.mobile_number
       })
-    }).then(response => response.json()).then(data => {
+    };
+    fetch(uri, options).then(response => {
+      if (response.ok) return response.json();
+      return authRefresh({ uri: uri, opts: options });
+    }).then(data => {
       if(!data.error) setAlert({msg: 'Saved!', t: 'success'});
       else setAlert({msg: 'Can not process request, check form & try again.', t: 'error'});
       setActive(true);

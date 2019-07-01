@@ -7,9 +7,9 @@ import config from 'config';
 const jwtDecode = require('jwt-decode');
 
 export const PrivateRoute = props => {
-  
+
   try {
-    if (localStorage.getItem("user") && Number.parseInt(new Date().getTime() / 1000) - jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken).exp < 0){    
+    if (localStorage.getItem("user") && Number.parseInt(new Date().getTime() / 1000) - jwtDecode(JSON.parse(localStorage.getItem("user")).accessToken).exp < 0){
       return <Route exact path={props.p} component={props.c} />;
     }
     if(props.type){
@@ -19,9 +19,10 @@ export const PrivateRoute = props => {
       return <Route exact path="/forgot_password" component={ResetPassword} />;
     }
       return (<Redirect to="/login" />);
-    
+
   } catch (error) {
-    var refToken=JSON.parse(localStorage.getItem("user")).refreshToken;
+    const user = JSON.parse(localStorage.getItem("user"))
+    const refToken = user.refreshToken;
     const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
     headers.append('accept', 'application/json');
@@ -30,16 +31,22 @@ export const PrivateRoute = props => {
 			method: 'POST',
 			headers: headers,
 			body: JSON.stringify({ token: refToken})
-		}).then(response => response.json()).then(data => {
+		}).then(response => {
+      if(response.ok) return response.json();
+      return null;
+    }).then(data => {
+      if(!data) {
+        // here we logout user
+        return (<Redirect to="/login" />);
+      }
 			console.log(data.message, "refresh");
-			if(data.message !== 'Auth failed') {
-				data.email = email;
-				localStorage.setItem('user', JSON.stringify(data));
-				setSuccess(true);
-			} else {
-				message.warning("Wrong email and/or password!");
-      		}
+			localStorage.setItem('user', {
+        ...user,
+        refreshToken: data.refreshToken,
+        accessToken: data.accessToken
+      });
+      return <Route exact path={props.p} component={props.c} />;
 		});
   }
-  
+
 };

@@ -43,16 +43,16 @@ export const Login = () => {
 				setSuccess(true);
 			} else {
 				message.warning("Wrong email and/or password!");
-      		}
+      }
 		});
 	}, [submitted]);
 
 	return (
 		<div className="custom" style={{ height: '100vh', width: '100vw', position: 'relative' }}>
 			<img src={back} style={{ height: '100%', width: '100%', position: 'absolute', zIndex: 1 }} />
-			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>				
+			<div className="container" style={{ position: 'absolute', zIndex: 2, width: '100%' }}>
 				<div className="row" style={{textAlign:'center', marginTop: '10vh'}}>
-					<img src={logo} />				
+					<img src={logo} />
 				</div>
 				<div className="row">
 					<div className="col-sm-4 col-xs-1"></div>
@@ -72,10 +72,10 @@ export const Login = () => {
 									{ submitted && !password &&
 										<div className="help-block">Password is required</div>
 									}
-								</div>								
+								</div>
 								<div className="form-check text-left">
 								  <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" />
-								  
+
 								  <label className="form-check-label" htmlFor="defaultCheck1" style={{ fontWeight: 'normal' }}>&nbsp;&nbsp;Remember Me</label>
 								</div>
 								<br />

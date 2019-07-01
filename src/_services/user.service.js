@@ -1,5 +1,5 @@
 import config from 'config';
-import { authHeader } from '../_helpers';
+import { authHeader, authRefresh } from '../_helpers';
 
 export const userService = {
     login,
@@ -8,14 +8,17 @@ export const userService = {
 };
 
 function login(email, password) {
+    const uri = `${config.apiUrl}/auth/login`;
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email:email , password:password })
     };
 
-    return fetch(`${config.apiUrl}/auth/login`, requestOptions)
-        .then(handleResponse)
+    return fetch(uri, requestOptions)
+        .then(response => {
+          return handleResponse(response, uri, requestOptions);
+        })
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('user', JSON.stringify(user));
@@ -26,28 +29,40 @@ function login(email, password) {
 
 function logout() {
     // remove user from local storage to log user out
-    console.log("a");
+    console.log('logging out');
     localStorage.removeItem('user');
 }
 
 function getAll() {
+    const uri = `${config.apiUrl}/users`;
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
+    return fetch(uri, requestOptions).then(response => {
+      return handleResponse(response, uri, requestOptions);
+    });
 }
 
-function handleResponse(response) {
-    return response.text().then(text => {
-        const data = text && JSON.parse(text);
+function handleResponse(response, request, options) {
+    return response.text().then(async text => {
+        let data = text && JSON.parse(text);
         if (!response.ok) {
+            if (response.status === 403) {
+              const refreshed = await authRefresh({ uri: request, opts: options });
+              if(refreshed.error === 500) {
+                // auto logout if refresh token failed
+                logout();
+                location.reload(true);
+                return null;
+              }
+              return refreshed;
+            }
             if (response.status === 401) {
-                // auto logout if 401 response returned from api
-                 console.log(response);
-                // logout();
-                // location.reload(true);
+                // this status now indicates server-side error not related to
+                // authorization or tokens
+                console.log(response);
             }
 
             const error = (data && data.message) || response.statusText;

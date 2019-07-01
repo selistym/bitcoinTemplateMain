@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import config from 'config';
-import { authHeader } from '../_helpers';
+import { authHeader, authRefresh } from '../_helpers';
 
 export const useListCoins = (default_flag) => {
 	const [coins, setCoins] = useState([]);
 
 	useEffect(() => {
-		fetch(`${config.apiUrl}/get_assets?default=` + default_flag, {
+    const uri = `${config.apiUrl}/get_assets?default=${default_flag}`;
+    const options = {
 	    method: 'GET',
 	    headers: authHeader()
-	  }).then(response => {
+	  };
+		fetch(uri, options).then(response => {
 	  	if(response.ok) return response.json();
-	  	else return JSON.stringify({ error: '500' });
+	  	else authRefresh({ uri: uri, opts: options });
 	  }).then(data => {
 		if(data.error) return;
 	    const formatted = data.map(c => {

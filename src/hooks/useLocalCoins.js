@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react';
 import config from 'config';
-import { authHeader } from '../_helpers';
+import { authHeader, authRefresh } from '../_helpers';
 
 export const useLocalCoins = () => {
 	const [coins, setCoins] = useState([]);
 
 	useEffect(() => {
-		fetch(`${config.apiUrl}/get_localbitcoin`, {
+    const uri = `${config.apiUrl}/get_localbitcoin`;
+    const options = {
 	    method: 'GET',
 	    headers: authHeader()
-	  }).then(response => {
+	  };
+		fetch(uri, options).then(response => {
 	  	if(response.ok) return response.json();
-	  	else return JSON.stringify({ error: '500' });
+	  	else authRefresh({ uri: uri, opts: options });
 	  }).then(data => {
-          console.log(data);
-		if(data.error) return;			
+		  if(data.error) return;
 	    const formatted = data.map(c => {
 	      const link = c.lb_img_url;
 	      delete c.img_url;
