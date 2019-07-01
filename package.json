@@ -8,8 +8,10 @@
     },
     "dependencies": {
         "antd": "^3.16.3",
+        "babel-polyfill": "^6.26.0",
         "bootstrap": "^4.3.1",
         "copy-webpack-plugin": "^5.0.3",
+        "core-js": "^3.1.4",
         "history": "^4.6.3",
         "jquery": "^3.4.1",
         "jwt-decode": "^2.2.0",
@@ -18,7 +20,6 @@
         "react-accessible-accordion": "^3.0.0",
         "react-addons-css-transition-group": "^15.6.0",
         "react-addons-shallow-compare": "^15.6.0",
-        "react-country-flag": "^1.0.2",
         "react-dom": "^16.8.6",
         "react-dom-factories": "^1.0.0",
         "react-favicon": "0.0.16",
@@ -32,7 +33,6 @@
         "react-sanfona": "^1.4.0",
         "react-select": "^3.0.4",
         "react-selectize": "^3.0.1",
-        "react-svg-spinner": "^1.0.4",
         "react-table": "^6.10.0",
         "react-tooltip": "^3.10.0",
         "react-transition-group": "^1.1.2",
@@ -40,7 +40,9 @@
         "redux-logger": "^3.0.6",
         "redux-thunk": "^2.2.0",
         "rxjs": "^6.4.0",
-        "rxjs-hooks": "^0.4.3"
+        "rxjs-hooks": "^0.4.3",
+        "url-search-params-polyfill": "^6.0.0",
+        "whatwg-url": "^7.0.0"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",

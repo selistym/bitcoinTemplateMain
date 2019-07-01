@@ -36,6 +36,7 @@ export const Login = () => {
 			headers: headers,
 			body: JSON.stringify({ email: email, password: password })
 		}).then(response => response.json()).then(data => {
+			console.log(data.message);
 			if(data.message !== 'Auth failed') {
 				data.email = email;
 				localStorage.setItem('user', JSON.stringify(data));
