@@ -6,7 +6,7 @@ import { Layout, Table, Slider } from 'antd';
 import { Navigation } from '../Navigation';
 import { CustomHeader } from '../Header';
 // custom hook
-import { useListCoins } from '../../hooks';
+import { useListCoins } from '../../utils';
 const loading = require('../_helpers/loading.gif');
 // helpers
 import { authHeader, authRefresh, dynamicSort } from '../../_helpers';

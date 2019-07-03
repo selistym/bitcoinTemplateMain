@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useLocalCoins } from "../../hooks";
+import { useLocalCoins } from "../../utils";
 import { numbericSort } from "../../_helpers";
 // react-table
 import ReactTable from "react-table";

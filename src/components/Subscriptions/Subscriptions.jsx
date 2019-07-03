@@ -5,7 +5,7 @@ import { Navigation } from '../Navigation';
 import { CustomHeader } from '../Header';
 // helpers
 import config from 'config';
-import { authHeader, authRefresh, dynamicSort } from '../../_helpers';
+import { authHeader, authRefresh } from '../../_helpers';
 
 const { Content } = Layout;
 

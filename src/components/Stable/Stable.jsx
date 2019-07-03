@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useStableCoins } from "../../hooks";
+import { useStableCoins } from "../../utils";
 // react-table
 import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
