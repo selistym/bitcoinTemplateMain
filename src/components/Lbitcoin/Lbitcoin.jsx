@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useLocalCoins } from "../../utils";
+import { useLocalCoins, numberWithCommasDecimals, removeSymbol } from "../../utils";
 import { numbericSort } from "../../_helpers";
 // react-table
 import ReactTable from "react-table";
@@ -14,33 +14,9 @@ import "./Lbitcoin.css";
 const { Content } = Layout;
 import loading from "../../static/loading.gif";
 
-const numberWithCommas = x => {
-  var parts = x.toString().split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return parts.join(".");
-};
-
-const numberWith2decimals = x => {
-  if (parseFloat(x).toFixed(2) != parseFloat(x)) {
-    return parseFloat(x).toFixed(2);
-  }
-  return x;
-};
-
-const removeSymbol = x => {
-  var strRet=x;
-  var idx=strRet.indexOf("(");
-  if(idx>0)
-    strRet=strRet.substring(0,idx-1);
-  return strRet;
-};
-
-export const Lbitcoin = () => {
-  const currency_sign = ["$", "Ƀ", "Ξ"];
-  const currency_letter = ["usd", "btc", "eth"];
-
-  const [coins, toCoins] = useState([]);
-  const [currency, setCurrency] = useState("0");
+export const Lbitcoin = () => {  
+  
+  const [coins, toCoins] = useState([]);  
   const fetched = useLocalCoins();
 
   useEffect(() => {
@@ -48,130 +24,69 @@ export const Lbitcoin = () => {
   }, [fetched]);
 
   // sort coins by mc_rank
-  coins.sort(function(a, b) {
-    return a.mc_rank - b.mc_rank;
-  });
+  coins.sort((a, b) => a.mc_rank - b.mc_rank);
 
   const coinColumns = [
     {
       Header: () => <CustomTableHeader title={"Name"} />,
       accessor: "lb_currency_name",
-      Cell: row => (
-        <Fragment>
-          <div className="tablehead">
-            <Img src={row.original.img_url} width="20px" height="20px" />{" "}
+      Cell: row => 
+        <div className="tablehead">
+          <Img src={row.original.img_url} width="20px" height="20px" />
             {removeSymbol(row.row.lb_currency_name)}
-          </div>
-        </Fragment>
-      ),
+        </div>,
       width: "16%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Tx (24h avg)"} />,
       accessor: "lb_avg_daily_tx_size",
-      Cell: row => (
-        <Fragment>
-          ${row.row.lb_avg_daily_tx_size
-            ? numberWithCommas(parseInt(row.row.lb_avg_daily_tx_size))
-            : 0}
-        </Fragment>
-      ),
+      Cell: row => <span>${numberWithCommasDecimals(row.row.lb_avg_daily_tx_size)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Tx (30d avg)"} />,
       accessor: "lb_avg_30d_tx_size",
-      Cell: row => (
-        <Fragment>
-          ${row.row.lb_avg_30d_tx_size
-            ? numberWithCommas(parseInt(row.row.lb_avg_30d_tx_size))
-            : 0}
-        </Fragment>
-      ),
+      Cell: row => <span>${numberWithCommasDecimals(row.row.lb_avg_30d_tx_size)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume (30d)"} />,
       accessor: "lb_tot_30d_tx_size",
-      Cell: row => (
-         <Fragment>
-          ${row.row.lb_tot_30d_tx_size
-            ? numberWithCommas(parseInt(row.row.lb_tot_30d_tx_size))
-            : 0}
-        </Fragment>
-      ),
+      Cell: row => <span>${numberWithCommasDecimals(row.row.lb_tot_30d_tx_size)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume change (30d)"} />,
       accessor: "lb_change_30d_tx_size",
-      Cell: row => (
-        <Fragment>
-          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-            {row.row.lb_change_30d_tx_size
-              ? numberWithCommas(numberWith2decimals(row.row.lb_change_30d_tx_size))
-              : 0}
-            %
-          </span>
-        </Fragment>
-      ),
+      Cell: row => 
+        <span style={{ color: row.row.lb_change_30d_tx_size >= 0 ? "green" : "red" }}>
+          {numberWithCommasDecimals(row.row.lb_change_30d_tx_size, 2)}%
+        </span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Price (weighted avg)"} />,
       accessor: "lb_weighted_avg_price",
-      Cell: row => (
-        <Fragment>
-          <span className="textaligncenter">
-            $
-            {row.row.lb_weighted_avg_price
-              ? numberWithCommas(parseInt(row.row.lb_weighted_avg_price))
-              : 0}
-          </span>
-        </Fragment>
-      ),
+      Cell: row => <span>${numberWithCommasDecimals(row.row.lb_weighted_avg_price)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Premium / Discount"} />,
       accessor: "lb_premium",
-      Cell: row => (
-        <Fragment>
-          <span style={{ color: row.value >= 0 ? "green" : "red" }}>
-            {row.row.lb_premium
-              ? numberWithCommas(row.row.lb_premium.toFixed(2))
-              : 0}%
-          </span>
-        </Fragment>
-      ),
+      Cell: row => <span style={{ color: row.row.lb_premium >= 0 ? "green" : "red" }}>
+            {numberWithCommasDecimals(row.row.lb_premium, 2)}%
+          </span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volatility (30d)"} />,
       accessor: "lb_volatility_30_days",
-      Cell: row => (
-        <Fragment>
-          <span className="textaligncenter">
-            {currency == "0"
-              ? numberWith2decimals(row.row.lb_volatility_30_days || 0)
-              : numberWith2decimals(row.row.lb_volatility_30_days || 0) +
-                currency_sign[Number(currency)]}
-          </span>
-        </Fragment>
-      ),
+      Cell: row => 
+        <span>{numberWithCommasDecimals(row.row.lb_volatility_30_days, 2)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
     }
   ];
-  const changeCurrencyUnit = currency => {
-    setCurrency(currency.value);
-  };
+ 
   return (
     <Content
       style={{
@@ -190,39 +105,13 @@ export const Lbitcoin = () => {
           >
             <div
               className="col-sm-6 "
-              style={{ textAlign: "left", width: "100%", padding: "0px" }}
+              style={{ textAlign: "left", width: "100%", padding: '0px', marginBottom: '10px' }}
             >
               <span style={{ fontSize: "14pt" }}>
                 Localbitcoins transactions by country
               </span>
-            </div>
-            <div
-              className="col-sm-6 "
-              style={{
-                justifyContent: "flex-end",
-                padding: 0,
-                width: "100%",
-                display: "flex"
-              }}
-            >
-              
-            </div>
-          </div>
-          <div
-            className="row"
-            style={{
-              width: "100%",
-              display: "flex",
-              padding: 0,
-              margin: 0,
-              paddingBottom: "10px"
-            }}
-          >
-            {/* <span style={{ fontSize: "12pt" }}>
-              The Following section is intended to describe the transactions
-              retrieved in Localbitcoins to understand global usage of bitcoin.
-            </span> */}
-          </div>
+            </div>            
+          </div>          
           <ReactTable
             data={coins.sort(numbericSort("lb_tot_30d_tx_size"))}
             columns={coinColumns}

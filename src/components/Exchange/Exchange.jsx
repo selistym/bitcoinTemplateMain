@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 // common custom components
 import { Layout } from "antd";
 // custom hook
-import { useExchanges } from "../../utils";
+import { useExchanges, numberWithCommasDecimals } from "../../utils";
 // react-table
 import ReactTable from "react-table";
 import { CustomTableHeader } from "../CustomTableHeader";
@@ -14,39 +14,9 @@ import loading from "../../static/loading.gif";
 
 const { Content } = Layout;
 
-const numberWithCommas = x => {
-  var parts = x.toString().split(".");
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return parts.join(".");
-};
-
-const numberWith6decimals = x => {
-  if (parseFloat(x).toFixed(6) != parseFloat(x)) {
-    return parseFloat(x).toFixed(6);
-  }
-  return x;
-};
-
-const numberWith4decimals = x => {
-  if (parseFloat(x).toFixed(4) != parseFloat(x)) {
-    return parseFloat(x).toFixed(4);
-  }
-  return x;
-};
-
-const numberWith2decimals = x => {
-  if (parseFloat(x).toFixed(2) != parseFloat(x)) {
-    return parseFloat(x).toFixed(2);
-  }
-  return x;
-};
-
 export const Exchange = () => {
-  const currency_sign = ["$", "Ƀ", "Ξ"];
-  const currency_letter = ["usd", "btc", "eth"];
-
-  const [coins, toCoins] = useState([]);
-  const [currency, setCurrency] = useState("0");
+  
+  const [coins, toCoins] = useState([]);  
   const fetched = useExchanges();
 
   useEffect(() => {
@@ -54,109 +24,56 @@ export const Exchange = () => {
   }, [fetched]);
 
   // sort coins by mc_rank
-  coins.sort(function(a, b) {
-    return a.mc_rank - b.mc_rank;
-  });
+  coins.sort((a, b) => a.mc_rank - b.mc_rank);
 
   const coinColumns = [
     {
       Header: () => <CustomTableHeader title={"Name"} />,
       accessor: "exch_exchange_title",
-      Cell: row => (
-        <Fragment>
-          <div className="tablehead">
-            <Img src={row.original.img_url} width="20px" height="20px" />{" "}
-            {row.row.exch_exchange_title}
-          </div>
-        </Fragment>
-      ),
+      Cell: row => 
+        <div className="tablehead">
+          <Img src={row.original.img_url} width="20px" height="20px" />{" "}
+          {row.row.exch_exchange_title}
+        </div>,
       width: "150"
-    },
-
-    {
+    },{
       Header: () => <CustomTableHeader title={"Country"} />,
       accessor: "exch_country",
-      Cell: row => (
-        <Fragment>
-          <span className="textaligncenter">{row.row.exch_country}</span>
-        </Fragment>
-      ),
+      Cell: row => <span className="textaligncenter">{row.row.exch_country}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume 24 Hr"} />,
       accessor: "exch_day_volume_usd",
-      Cell: row => (
-        <Fragment>
-         <span
-            style={{
-              color: "blue"
-            }}
-          >
-             ${row.row.exch_day_volume_usd
-              ? numberWithCommas(parseInt(row.row.exch_day_volume_usd))
-              : 0}
-          </span>
-        </Fragment>
-      ),
+      Cell: row => <span style={{color: "blue"}}>${numberWithCommasDecimals(row.row.exch_day_volume_usd)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Volume 24 Hr %"} />,
       accessor: "exch_day_volume_change_usd",
-      Cell: row => (
-        <Fragment>
-          <span
-            style={{
-              color: row.row.exch_day_volume_change_usd >= 0 ? "green" : "red"
-            }}
-          >
-            {row.row.exch_day_volume_change_usd != 0
-              ? numberWith2decimals(row.row.exch_day_volume_change_usd)
-              : 0}
-            %
-          </span>
-        </Fragment>
-      ),
+      Cell: row => 
+          <span style={{ color: row.row.exch_day_volume_change_usd >= 0 ? "green" : "red"}}>
+            {numberWithCommasDecimals(row.row.exch_day_volume_change_usd, 2)}%
+          </span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Number of Pairs"} />,
       accessor: "exch_num_of_pairs",
-      Cell: row => (
-        <Fragment>
-          <span className="textaligncenter">
-            {row.row.exch_num_of_pairs
-              ? numberWith2decimals(row.row.exch_num_of_pairs)
-              : 0}
-          </span>
-        </Fragment>
-      ),
+      Cell: row => 
+          <span>{numberWithCommasDecimals(row.row.exch_num_of_pairs, 2)}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"Decenterilzed"} />,
       accessor: "exch_is_decenterilzed",
-      Cell: row => (
-        <Fragment>
-          <span>{row.row.exch_is_decenterilzed ? "true" : "false"}</span>
-        </Fragment>
-      ),
+      Cell: row => <span>{row.row.exch_is_decenterilzed ? "true" : "false"}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
-    },
-    {
+    },{
       Header: () => <CustomTableHeader title={"KYC"} />,
       accessor: "exch_kyc",
-      Cell: row => (
-        <Fragment>
-          <span>{row.row.exch_kyc ? "true" : "false"}</span>
-        </Fragment>
-      ),
+      Cell: row => <span>{row.row.exch_kyc ? "true" : "false"}</span>,
       sortMethod: (a, b) => a - b,
       width: "8%"
     }

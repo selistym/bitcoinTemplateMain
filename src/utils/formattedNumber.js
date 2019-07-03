@@ -20,10 +20,17 @@ export const numberWithCommasDecimals = (value, decimal = 0) => {
 export const numberWithExpressive = value => {
     if (value) {
         if (value > 100) return numberWithCommasDecimals(value, 6);
-        else if (value < 1) {            
+        else if (value < 1) {
             if (value <= 0.000000001) return value.toPrecision(4);
             return numberWithCommasDecimals(value, 6);
         } else return numberWithCommasDecimals(value, 2)
     }
-    return 0;    
+    return 0;
 }
+
+export const removeSymbol = value => {
+    let idx = value.indexOf("(");
+    if (idx > 0)
+        value = value.substring(0, idx - 1);
+    return value;
+};
