@@ -18,9 +18,10 @@ export const PrivateRoute = props => {
     if(props.token){
       return <Route exact path="/forgot_password" component={ResetPassword} />;
     }
-      return (<Redirect to="/login" />);
+    return (<Redirect to="/login" />);
 
   } catch (error) {
+    console.log('here???')
     const user = JSON.parse(localStorage.getItem("user"))
     const refToken = user.refreshToken;
     const headers = new Headers();

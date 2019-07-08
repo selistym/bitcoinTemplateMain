@@ -12,7 +12,7 @@ export const ResetPassword = props => {
   const [success, setSuccess] = useState(false);
 
   const recvToken = new URLSearchParams(props.location.search).get("token");
-
+  console.log(recvToken, 'reset')
   const handlePassword = e => {
     if (e.target.value === "") {
       message.warning("Password is required.");
